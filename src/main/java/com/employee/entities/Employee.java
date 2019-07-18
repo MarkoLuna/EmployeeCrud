@@ -3,10 +3,10 @@ package com.employee.entities;
 import com.employee.enums.EmployeeStatus;
 import lombok.Data;
 import lombok.ToString;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Data
 @ToString
@@ -15,8 +15,9 @@ import java.util.UUID;
 public class Employee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
+    private String id;
 
     private String firstName;
     private String middleInitial;
