@@ -1,7 +1,6 @@
 package com.employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +17,8 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
 @EnableAuthorizationServer
 public class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
+    private static final int ONE_HOUR_IN_SECONDS = 3600;
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -32,7 +33,8 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
                 .authorities ("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT", "USER")
                 .scopes ("read", "write")
                 .autoApprove (true)
-                .secret (passwordEncoder (). encode ("password"));
+                .secret(passwordEncoder().encode("password"))
+                .accessTokenValiditySeconds(ONE_HOUR_IN_SECONDS * 24);
     }
     @Bean
     public PasswordEncoder passwordEncoder () {
