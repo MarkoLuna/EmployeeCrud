@@ -32,6 +32,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 })
 public class EmployeeControllerTest {
 
+    private static final String BASIC_DATE = "17-09-2012";
+
     @Autowired
     private WebApplicationContext wac;
 
@@ -106,7 +108,7 @@ public class EmployeeControllerTest {
     public void createEmployee() throws Exception {
         mvc.perform(post("/employees")
                 .header(HttpHeaders.AUTHORIZATION, token)
-                .content(asJsonString(new EmployeeRequest("Gerardo2", "J", "Luna", "17-09-2012", "17-09-2012")))
+                .content(asJsonString(new EmployeeRequest("Gerardo2", "J", "Luna", BASIC_DATE, BASIC_DATE)))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -118,7 +120,7 @@ public class EmployeeControllerTest {
     public void updateEmployee() throws Exception {
         mvc.perform(put("/employees/{id}", "e26b1ed4-a8d0-11e9-a2a3-2a2ae2dbcce4")
                 .header(HttpHeaders.AUTHORIZATION, token)
-                .content(asJsonString(new EmployeeRequest("Gerardo", "J", "Luna", "17-09-2012", "17-09-2012")))
+                .content(asJsonString(new EmployeeRequest("Gerardo", "J", "Luna", BASIC_DATE, BASIC_DATE)))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

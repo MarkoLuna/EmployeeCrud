@@ -1,12 +1,30 @@
 {
 	"info": {
-		"_postman_id": "e848aae9-da32-4409-adb0-dc9f63aef010",
+		"_postman_id": "179e2527-5329-43b3-b21c-2e9e39ed3464",
 		"name": "EmployeeCrud",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "login",
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1d5f03ed-b0e4-40ef-a16e-6e4517103d69",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"if (jsonData[\"access_token\"] != null) {",
+							"    postman.setEnvironmentVariable(\"auth_token\", jsonData[\"access_token\"]);",
+							"}",
+							"if (jsonData[\"token_type\"] != null) {",
+							"    postman.setEnvironmentVariable(\"auth_type\", jsonData[\"token_type\"]);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"auth": {
 					"type": "basic",
@@ -67,28 +85,24 @@
 			"response": []
 		},
 		{
-			"name": "listEmployees",
+			"name": "ListEmployees",
 			"request": {
 				"method": "GET",
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "bearer a938c1ba-0ec2-4342-ba17-ae575d9f9e9e",
+						"value": "{{auth_type}} {{auth_token}}",
 						"type": "text"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
-					"raw": "localhost:8080/employee/0/10",
+					"raw": "localhost:8080/employees/0/10",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"employee",
+						"employees",
 						"0",
 						"10"
 					]
@@ -97,28 +111,119 @@
 			"response": []
 		},
 		{
-			"name": "getEmployee",
+			"name": "GetEmployee",
 			"request": {
 				"method": "GET",
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "bearer a938c1ba-0ec2-4342-ba17-ae575d9f9e9e",
+						"value": "{{auth_type}} {{auth_token}}",
 						"type": "text"
 					}
 				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
 				"url": {
-					"raw": "localhost:8080/employee/e26b200a-a8d0-11e9-a2a3-2a2ae2dbcce4",
+					"raw": "localhost:8080/employees/e26b200a-a8d0-11e9-a2a3-2a2ae2dbcce4",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"employee",
+						"employees",
+						"e26b200a-a8d0-11e9-a2a3-2a2ae2dbcce4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateEmployee",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{auth_type}} {{auth_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"firstName\": \"Mark\",\n\t\"middleInitial\": \"L\",\n\t\"lastName\": \"Luna\",\n\t\"dateOfBirth\": \"17-09-2012\",\n\t\"dateOfEmployment\": \"17-09-2014\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/employees/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"employees",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteEmployee",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{auth_type}} {{auth_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:8080/employees/d508a6eb-829e-4cb2-8e3b-84e799d11f88",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"employees",
+						"d508a6eb-829e-4cb2-8e3b-84e799d11f88"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateEmployee",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{auth_type}} {{auth_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"firstName\": \"Mark\",\n\t\"middleInitial\": \"L\",\n\t\"lastName\": \"Luna\",\n\t\"dateOfBirth\": \"17-09-2012\",\n\t\"dateOfEmployment\": \"17-09-2014\"\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/employees/e26b200a-a8d0-11e9-a2a3-2a2ae2dbcce4",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"employees",
 						"e26b200a-a8d0-11e9-a2a3-2a2ae2dbcce4"
 					]
 				}
