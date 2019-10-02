@@ -27,24 +27,8 @@ import static springfox.documentation.builders.PathSelectors.regex;
 @EnableSwagger2
 public class SpringFoxConfig {
 
-    /*
-    @Bean
-    public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                // .paths(paths())
-                .paths(PathSelectors.any())
-                .build()
-                .apiInfo(getApiInfo())
-                .securitySchemes(Collections.singletonList(apiKey()))
-                .securityContexts(Collections.singletonList(securityContext()))
-                .useDefaultResponseMessages(false);
-    }
-    */
-
     private Predicate<String> paths() {
         return or(
-                // regex("/oauth/token"),
                 regex("/employees.*")
         );
     }
@@ -62,68 +46,27 @@ public class SpringFoxConfig {
         );
     }
 
-    /**
-    private ApiKey apiKey() {
-        return new ApiKey("Authentication", "Authorization", "Authorization");
-    }
-
-    private List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEmployees");
-        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = authorizationScope;
-        return Collections.singletonList(new SecurityReference("Authentication", authorizationScopes));
-    }
-
-    private SecurityContext securityContext() {
-        return SecurityContext.builder()
-                .securityReferences(defaultAuth())
-                .forPaths(PathSelectors.regex("/employees.*"))
-                .build();
-    }*/
-
     @Bean
     public Docket productApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(paths())
-                // .paths(PathSelectors.any())
                 .build()
                 .securityContexts(Collections.singletonList(securityContext()))
                 .securitySchemes(Arrays.asList(securitySchema()))
-                // .securitySchemes(Arrays.asList(securitySchema(), apiKey(), apiCookieKey()))
                 .apiInfo(getApiInfo());
     }
 
     @Value("${config.oauth2.accessTokenUri}")
     private String accessTokenUri;
 
-    /**
-    public static final String securitySchemaOAuth2 = "oauth2schema";
-    public static final String authorizationScopeGlobal = "global";
-    public static final String authorizationScopeGlobalDesc ="accessEverything";
-     */
-
     @Bean
     public SecurityScheme apiKey() {
         return new ApiKey(HttpHeaders.AUTHORIZATION, "apiKey", "header");
     }
 
-    /**
-    @Bean
-    public SecurityScheme apiCookieKey() {
-        return new ApiKey(HttpHeaders.COOKIE, "apiKey", "cookie");
-    }
-     */
-
     private OAuth securitySchema() {
-
-        /**
-        List<AuthorizationScope> authorizationScopeList = new ArrayList<>();
-        authorizationScopeList.add(new AuthorizationScope("read", "read all"));
-        authorizationScopeList.add(new AuthorizationScope("write", "access all"));
-         */
-
         List<GrantType> grantTypes = new ArrayList<>();
         GrantType passwordCredentialsGrant = new ResourceOwnerPasswordCredentialsGrant(accessTokenUri);
         grantTypes.add(passwordCredentialsGrant);
@@ -138,13 +81,6 @@ public class SpringFoxConfig {
     }
 
     private List<SecurityReference> defaultAuth() {
-        /**
-        final AuthorizationScope[] authorizationScopes = new AuthorizationScope[3];
-        authorizationScopes[0] = new AuthorizationScope("read", "read all");
-        authorizationScopes[1] = new AuthorizationScope("trust", "trust all");
-        authorizationScopes[2] = new AuthorizationScope("write", "write all");
-         */
-
         return Collections.singletonList(new SecurityReference("oauth2", new AuthorizationScope[0]));
     }
 
