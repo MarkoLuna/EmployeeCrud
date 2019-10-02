@@ -1,0 +1,281 @@
+#### for see more details go to https://editor.swagger.io
+swagger: '2.0'
+
+# System info
+info:
+  description: Basic Crud of Employees
+  version: 1.0.0
+  title: Employee Crud
+  contact:
+    name: Jose Marcos Luna
+    email: josemarcosluna9@gmail.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0'
+host: 'localhost:8080'
+basePath: /
+tags:
+  - name: employee-controller
+    description: 'Set of endpoints for Creating, Retrieving, Updating and Deleting of Employees.'
+
+# paths definition
+paths:
+  /employees:
+    post:
+      tags:
+        - employee-controller
+      summary: Creates a new employee.
+      operationId: saveEmployeeUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json;charset=UTF-8
+      parameters:
+        - in: body
+          name: request
+          description: Employee information for a new employee to be created.
+          required: false
+          schema:
+            $ref: '#/definitions/EmployeeRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/EmployeeDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      security:
+        - oauth2: []
+  '/employees/{id}':
+    get:
+      tags:
+        - employee-controller
+      summary: Returns a specific employee by their identifier. 404 if does not exist.
+      operationId: getEmployeeUsingGET
+      produces:
+        - application/json;charset=UTF-8
+      parameters:
+        - name: id
+          in: path
+          description: Id of the employee to be obtained. Cannot be empty.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/EmployeeDto'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      security:
+        - oauth2: []
+    put:
+      tags:
+        - employee-controller
+      summary: updateEmployee
+      operationId: updateEmployeeUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json;charset=UTF-8
+      parameters:
+        - name: id
+          in: path
+          description: id
+          required: true
+          type: string
+        - in: body
+          name: request
+          description: request
+          required: true
+          schema:
+            $ref: '#/definitions/EmployeeRequest'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/EmployeeDto'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      security:
+        - oauth2: []
+    delete:
+      tags:
+        - employee-controller
+      summary: Deletes a employee from the system. 404 if the employee's identifier is not found.
+      operationId: deleteEmployeeUsingDELETE
+      produces:
+        - application/json;charset=UTF-8
+      parameters:
+        - name: id
+          in: path
+          description: Id of the employee to be deleted. Cannot be empty.
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+      security:
+        - oauth2: []
+  '/employees/{page}/{size}':
+    get:
+      tags:
+        - employee-controller
+      summary: Returns list of all Employees in the system.
+      operationId: listUsingGET
+      produces:
+        - application/json;charset=UTF-8
+      parameters:
+        - name: page
+          in: path
+          description: Page number of the employee list to be obtained. Cannot be empty.
+          required: true
+          type: integer
+          format: int32
+        - name: size
+          in: path
+          description: Page size of the employee list to be obtained. Cannot be empty.
+          required: true
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Page«EmployeeDto»'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      security:
+        - oauth2: []
+
+# security definition
+securityDefinitions:
+  oauth2:
+    type: oauth2
+    tokenUrl: 'http://localhost:8080/oauth/token'
+    flow: password
+
+# models definition
+definitions:
+  EmployeeDto:
+    type: object
+    properties:
+      dateOfBirth:
+        type: string
+      dateOfEmployment:
+        type: string
+      firstName:
+        type: string
+      id:
+        type: string
+      lastName:
+        type: string
+      middleInitial:
+        type: string
+      status:
+        type: string
+    title: EmployeeDto
+  EmployeeRequest:
+    type: object
+    properties:
+      dateOfBirth:
+        type: string
+      dateOfEmployment:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      middleInitial:
+        type: string
+    title: EmployeeRequest
+  Pageable:
+    type: object
+    properties:
+      offset:
+        type: integer
+        format: int64
+      pageNumber:
+        type: integer
+        format: int32
+      pageSize:
+        type: integer
+        format: int32
+      paged:
+        type: boolean
+      sort:
+        $ref: '#/definitions/Sort'
+      unpaged:
+        type: boolean
+    title: Pageable
+  Page«EmployeeDto»:
+    type: object
+    properties:
+      content:
+        type: array
+        items:
+          $ref: '#/definitions/EmployeeDto'
+      empty:
+        type: boolean
+      first:
+        type: boolean
+      last:
+        type: boolean
+      number:
+        type: integer
+        format: int32
+      numberOfElements:
+        type: integer
+        format: int32
+      pageable:
+        $ref: '#/definitions/Pageable'
+      size:
+        type: integer
+        format: int32
+      sort:
+        $ref: '#/definitions/Sort'
+      totalElements:
+        type: integer
+        format: int64
+      totalPages:
+        type: integer
+        format: int32
+    title: Page«EmployeeDto»
+  Sort:
+    type: object
+    properties:
+      empty:
+        type: boolean
+      sorted:
+        type: boolean
+      unsorted:
+        type: boolean
+    title: Sort
