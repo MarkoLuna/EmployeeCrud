@@ -92,7 +92,7 @@ public class EmployeeControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
-    @DisplayName("Attempt list all employees and has unauthorized")
+    @DisplayName("Get a employee by Id")
     @Test
     public void getEmployeeById() throws Exception {
         mvc.perform(get("/employees/{id}", "e26b1ed4-a8d0-11e9-a2a3-2a2ae2dbcce4")
