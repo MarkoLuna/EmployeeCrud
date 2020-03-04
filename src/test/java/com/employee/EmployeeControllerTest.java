@@ -4,9 +4,9 @@ import com.employee.dto.EmployeeRequest;
 import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JacksonJsonParser;
@@ -32,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         ResourceServerConfiguration.class
 })
 @DisplayName("Employee tests")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class EmployeeControllerTest {
 
     private static final String BASIC_DATE = "17-09-2012";
