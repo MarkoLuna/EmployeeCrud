@@ -21,8 +21,7 @@ import java.util.Optional;
 @Log4j2
 @RestController
 @RequestMapping(value = "/employees", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-@Api(description = "Set of endpoints for Creating, Retrieving, Updating and Deleting of Employees.",
-        authorizations = { @Authorization("Bearer ...") })
+@Api(description = "Set of endpoints for Creating, Retrieving, Updating and Deleting of Employees.")
 public class EmployeeController {
 
     private static final String MESSAGE_HEADER = "message";

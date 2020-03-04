@@ -3,17 +3,18 @@ package com.employee;
 import com.employee.dto.EmployeeRequest;
 import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.web.FilterChainProxy;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -24,12 +25,13 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {
         AuthorizationServerConfiguration.class,
         EmployeeCrudApplication.class,
         ResourceServerConfiguration.class
 })
+@DisplayName("Employee tests")
 public class EmployeeControllerTest {
 
     private static final String BASIC_DATE = "17-09-2012";
@@ -44,7 +46,7 @@ public class EmployeeControllerTest {
 
     private static String token;
 
-    @Before
+    @BeforeAll
     public void setup() throws Exception {
         this.mvc = MockMvcBuilders
                 .webAppContextSetup(this.wac)
@@ -74,7 +76,7 @@ public class EmployeeControllerTest {
         token = jsonParser.parseMap(resultString).get("token_type").toString() + jsonParser.parseMap(resultString).get("access_token").toString();
     }
 
-    @DisplayName("list all employees")
+    @DisplayName("List all employees")
     @Test
     public void getAllEmployees() throws Exception {
         mvc.perform(get("/employees/{page}/{total}", 0, 10)
@@ -92,7 +94,7 @@ public class EmployeeControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
-    @DisplayName("Attempt list all employees and has unauthorized")
+    @DisplayName("Get employee by Id")
     @Test
     public void getEmployeeById() throws Exception {
         mvc.perform(get("/employees/{id}", "e26b1ed4-a8d0-11e9-a2a3-2a2ae2dbcce4")
@@ -115,7 +117,7 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.id").exists());
     }
 
-    @DisplayName("update employee")
+    @DisplayName("Update employee")
     @Test
     public void updateEmployee() throws Exception {
         mvc.perform(put("/employees/{id}", "e26b1ed4-a8d0-11e9-a2a3-2a2ae2dbcce4")
@@ -128,7 +130,7 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.lastName").value("Luna"));
     }
 
-    @DisplayName("delete employee")
+    @DisplayName("Delete employee")
     @Test
     public void deleteEmployee() throws Exception {
         mvc.perform(delete("/employees/{id}", "e26b1d76-a8d0-11e9-a2a3-2a2ae2dbcce4")
