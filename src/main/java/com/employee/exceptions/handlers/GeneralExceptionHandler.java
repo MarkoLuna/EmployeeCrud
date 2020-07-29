@@ -19,32 +19,32 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	private static final String MESSAGE_HEADER = "message";
 	
-    @ExceptionHandler(Exception.class)
-    public final ResponseEntity<String> handleAllExceptions(Exception ex, WebRequest request) {
-    	log.throwing(ex);
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
+	@ExceptionHandler(Exception.class)
+	public final ResponseEntity<String> handleAllExceptions(Exception ex, WebRequest request) {
+		log.throwing(ex);
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	}
  
-    @ExceptionHandler(EmployeeNotFound.class)
-    public final ResponseEntity<String> handleEmployeeNotFoundException(EmployeeNotFound ex,
-                                                WebRequest request) {
-    	log.throwing(ex);
+	@ExceptionHandler(EmployeeNotFound.class)
+	public final ResponseEntity<String> handleEmployeeNotFoundException(EmployeeNotFound ex, 
+			WebRequest request) {
+		log.throwing(ex);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(MESSAGE_HEADER, ex.getMessage());
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(MESSAGE_HEADER, ex.getMessage());
 
-        return ResponseEntity.notFound().headers(headers).build();
-    }
+		return ResponseEntity.notFound().headers(headers).build();
+	}
     
-    @ExceptionHandler(InvalidDataException.class)
-    public final ResponseEntity<String> handleEmployeeNotFoundException(InvalidDataException ex,
-    		WebRequest request) {
-    	log.throwing(ex);
-    	
-    	HttpHeaders headers = new HttpHeaders();
-        headers.add(MESSAGE_HEADER, ex.getMessage());
+	@ExceptionHandler(InvalidDataException.class)
+	public final ResponseEntity<String> handleInvalidDataException(InvalidDataException ex, 
+			WebRequest request) {
+		log.throwing(ex);
 
-        return ResponseEntity.badRequest().headers(headers).build();
-    }
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(MESSAGE_HEADER, ex.getMessage());
+
+		return ResponseEntity.badRequest().headers(headers).build();
+	}
 
 }
