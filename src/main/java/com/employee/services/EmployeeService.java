@@ -87,10 +87,9 @@ public class EmployeeService {
         return Objects.isNull(value) || value.isEmpty();
     }
 
-    public Optional<EmployeeDto> getEmployee(String employeeId) throws EmployeeNotFound {
+    public EmployeeDto getEmployee(String employeeId) throws EmployeeNotFound {
         Optional<Employee> employee = employeeRepository.findByIdAndStatus(employeeId, EmployeeStatus.ACTIVE);
-        EmployeeDto employeeDto = mapEmployeeDto(employee.orElseThrow(() -> new EmployeeNotFound("Unable to find the Employee")));
-        return Optional.of(employeeDto);
+        return mapEmployeeDto(employee.orElseThrow(() -> new EmployeeNotFound("Unable to find the Employee")));
     }
 
     public Optional<String> hasValidDates(EmployeeRequest employeeReq) {
