@@ -28,7 +28,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
 @RestController
-@RequestMapping(value = "/employees", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/employees", produces = MediaType.APPLICATION_JSON_VALUE)
 @Api(description = "Set of endpoints for Creating, Retrieving, Updating and Deleting of Employees.")
 public class EmployeeController {
 

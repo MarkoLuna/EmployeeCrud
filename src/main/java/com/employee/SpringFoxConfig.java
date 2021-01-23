@@ -1,6 +1,5 @@
 package com.employee;
 
-import com.google.common.base.Predicate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
-import static com.google.common.base.Predicates.or;
 import static springfox.documentation.builders.PathSelectors.regex;
 
 @Configuration
@@ -27,9 +26,7 @@ import static springfox.documentation.builders.PathSelectors.regex;
 public class SpringFoxConfig {
 
     private Predicate<String> paths() {
-        return or(
-                regex("/employees.*")
-        );
+        return regex("/employees.*");
     }
 
     private ApiInfo getApiInfo() {

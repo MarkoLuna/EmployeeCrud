@@ -29,7 +29,7 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
 
     public Page<EmployeeDto> list(Integer page, Integer sizePage) {
-        Sort orders = new Sort(Sort.Direction.DESC, "dateOfEmployment");
+        Sort orders = Sort.by(Sort.Direction.DESC, "dateOfEmployment");
         Page<Employee> employeeList = employeeRepository.findByStatus(EmployeeStatus.ACTIVE, PageRequest.of(page, sizePage, orders));
         return employeeList.map(this::mapEmployeeDto);
     }
