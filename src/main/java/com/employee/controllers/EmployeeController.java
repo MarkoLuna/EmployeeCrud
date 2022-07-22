@@ -23,32 +23,42 @@ import com.employee.dto.EmployeeRequest;
 import com.employee.exceptions.InvalidDataException;
 import com.employee.services.EmployeeService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping(value = "/employees", produces = MediaType.APPLICATION_JSON_VALUE)
-@Api(description = "Set of endpoints for Creating, Retrieving, Updating and Deleting of Employees.")
+@Tag(
+        name = "Employees",
+        description = "Set of endpoints for Creating, Retrieving, Updating and Deleting of Employees."
+)
 public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
 
     @GetMapping("/{page}/{size}")
-    @ApiOperation("Returns list of all Employees in the system.")
-    public ResponseEntity<Page<EmployeeDto>> list(@ApiParam(required = true, name = "page", value = "Page number of the employee list to be obtained. Cannot be empty.")
-                                                      @PathVariable("page") Integer page,
-                                                  @ApiParam(required = true, name = "size", value = "Page size of the employee list to be obtained. Cannot be empty.")
-                                                  @PathVariable("size") Integer pageSize) {
+    @Operation(summary = "Returns list of all Employees in the system.")
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<Page<EmployeeDto>> list(
+            @Parameter(required = true, name = "page",
+                    description = "Page number of the employee list to be obtained. Cannot be empty.")
+            @PathVariable("page") Integer page,
+            @Parameter(required = true, name = "size",
+                    description = "Page size of the employee list to be obtained. Cannot be empty.")
+            @PathVariable("size") Integer pageSize) {
     	
         Page<EmployeeDto> employeeDtoList = employeeService.list(page, pageSize);
         return new ResponseEntity<>(employeeDtoList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    @ApiOperation("Returns a specific employee by their identifier. 404 if does not exist.")
-    public ResponseEntity<EmployeeDto> getEmployee(@ApiParam(required = true,  name = "id", value = "Id of the employee to be obtained. Cannot be empty.")
+    @Operation(summary = "Returns a specific employee by their identifier. 404 if does not exist.")
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<EmployeeDto> getEmployee(@Parameter(required = true,  name = "id",
+            description = "Id of the employee to be obtained. Cannot be empty.")
                                                        @PathVariable("id") String employeeId) {
 
         EmployeeDto employee = employeeService.getEmployee(employeeId);
@@ -56,13 +66,16 @@ public class EmployeeController {
     }
 
     @PostMapping()
-    @ApiOperation("Creates a new employee.")
+    @Operation(summary = "Creates a new employee.")
+    @SecurityRequirement(name = "Bearer Authentication")
     public ResponseEntity<EmployeeDto> saveEmployee(
-            @ApiParam("Employee information for a new employee to be created.") @Valid @RequestBody EmployeeRequest request) {
+            @Parameter(description = "Employee information for a new employee to be created.")
+            @Valid @RequestBody EmployeeRequest request) {
         
         Optional<String> invalidError = employeeService.hasValidDates(request);
-        if(invalidError.isPresent())
+        if (invalidError.isPresent()) {
             throw new InvalidDataException(invalidError.get());
+        }
 
         EmployeeDto employee = employeeService.createEmployee(request)
                 .orElseThrow(() -> new InvalidDataException("Employee already exists .."));
@@ -70,16 +83,21 @@ public class EmployeeController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable("id") String employeeId, @Valid @RequestBody EmployeeRequest request) {
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<EmployeeDto> updateEmployee(@PathVariable("id") String employeeId,
+                                                      @Valid @RequestBody EmployeeRequest request) {
 
         EmployeeDto employee = employeeService.updateEmployee(employeeId, request);
         return new ResponseEntity<>(employee, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    @ApiOperation("Deletes a employee from the system. 404 if the employee's identifier is not found.")
-    public ResponseEntity<String> deleteEmployee(@ApiParam(required = true, name = "id", value =  "Id of the employee to be deleted. Cannot be empty.")
-                                                     @PathVariable("id") String employeeId) {
+    @Operation(summary = "Deletes a employee from the system. 404 if the employee's identifier is not found.")
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<String> deleteEmployee(
+            @Parameter(required = true, name = "id",
+                    description =  "Id of the employee to be deleted. Cannot be empty.")
+            @PathVariable("id") String employeeId) {
 
         employeeService.deleteEmployee(employeeId);
         return new ResponseEntity<>("Employee Deleted", HttpStatus.OK);

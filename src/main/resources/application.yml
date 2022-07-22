@@ -3,3 +3,7 @@ server:
 config:
   oauth2:
     accessTokenUri: http://localhost:8080/oauth/token
+
+springdoc:
+  packagesToScan: com.employee
+  pathsToMatch: /employees/**, /oauth/token
