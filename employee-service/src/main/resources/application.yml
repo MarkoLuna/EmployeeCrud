@@ -1,9 +1,23 @@
 server:
   port: 8080
-config:
-  oauth2:
-    accessTokenUri: http://localhost:8080/oauth/token
 
 springdoc:
   packagesToScan: com.employee
   pathsToMatch: /employees/**, /oauth/token
+
+####### resource server configuration properties
+spring:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    defer-datasource-initialization: true
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8083/auth/realms/baeldung

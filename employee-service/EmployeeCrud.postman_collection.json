@@ -1,100 +1,81 @@
 {
 	"info": {
-		"_postman_id": "179e2527-5329-43b3-b21c-2e9e39ed3464",
+		"_postman_id": "c0a35bda-2d47-4597-992c-9eb4f4919d4b",
 		"name": "EmployeeCrud",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17399376"
 	},
 	"item": [
 		{
-			"name": "Login",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "1d5f03ed-b0e4-40ef-a16e-6e4517103d69",
-						"exec": [
-							"var jsonData = JSON.parse(responseBody);",
-							"if (jsonData[\"access_token\"] != null) {",
-							"    postman.setEnvironmentVariable(\"auth_token\", jsonData[\"access_token\"]);",
-							"}",
-							"if (jsonData[\"token_type\"] != null) {",
-							"    postman.setEnvironmentVariable(\"auth_type\", jsonData[\"token_type\"]);",
-							"}"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "basic",
-					"basic": [
-						{
-							"key": "username",
-							"value": "client",
-							"type": "string"
-						},
-						{
-							"key": "password",
-							"value": "password",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/x-www-form-urlencoded",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "password",
-							"value": "secret",
-							"type": "text"
-						},
-						{
-							"key": "username",
-							"value": "user",
-							"type": "text"
-						},
-						{
-							"key": "grant_type",
-							"value": "password",
-							"type": "text"
-						}
-					]
-				},
-				"url": {
-					"raw": "localhost:8080/oauth/token",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"oauth",
-						"token"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "ListEmployees",
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "useBrowser",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "client_authentication",
+							"value": "body",
+							"type": "string"
+						},
+						{
+							"key": "tokenType",
+							"value": "Bearer",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "Nextiva Token",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "{{client_secret}}",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "{{client_id}}",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "{{access_token_url}}",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "{{auth_url}}",
+							"type": "string"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "{{callback_url}}",
+							"type": "string"
+						},
+						{
+							"key": "state",
+							"value": "anything",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "openid profile",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{auth_type}} {{auth_token}}",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "localhost:8080/employees/0/10",
 					"host": [
@@ -113,14 +94,73 @@
 		{
 			"name": "GetEmployee",
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "useBrowser",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "client_authentication",
+							"value": "body",
+							"type": "string"
+						},
+						{
+							"key": "tokenType",
+							"value": "Bearer",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "Nextiva Token",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "{{client_secret}}",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "{{client_id}}",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "{{access_token_url}}",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "{{auth_url}}",
+							"type": "string"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "{{callback_url}}",
+							"type": "string"
+						},
+						{
+							"key": "state",
+							"value": "anything",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "openid profile",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{auth_type}} {{auth_token}}",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "localhost:8080/employees/e26b200a-a8d0-11e9-a2a3-2a2ae2dbcce4",
 					"host": [
@@ -138,13 +178,73 @@
 		{
 			"name": "CreateEmployee",
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "useBrowser",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "client_authentication",
+							"value": "body",
+							"type": "string"
+						},
+						{
+							"key": "tokenType",
+							"value": "Bearer",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "Nextiva Token",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "{{client_secret}}",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "{{client_id}}",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "{{access_token_url}}",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "{{auth_url}}",
+							"type": "string"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "{{callback_url}}",
+							"type": "string"
+						},
+						{
+							"key": "state",
+							"value": "anything",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "openid profile",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{auth_type}} {{auth_token}}",
-						"type": "text"
-					},
 					{
 						"key": "Content-Type",
 						"name": "Content-Type",
@@ -173,14 +273,73 @@
 		{
 			"name": "DeleteEmployee",
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "useBrowser",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "client_authentication",
+							"value": "body",
+							"type": "string"
+						},
+						{
+							"key": "tokenType",
+							"value": "Bearer",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "Nextiva Token",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "{{client_secret}}",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "{{client_id}}",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "{{access_token_url}}",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "{{auth_url}}",
+							"type": "string"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "{{callback_url}}",
+							"type": "string"
+						},
+						{
+							"key": "state",
+							"value": "anything",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "openid profile",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "DELETE",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{auth_type}} {{auth_token}}",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "localhost:8080/employees/d508a6eb-829e-4cb2-8e3b-84e799d11f88",
 					"host": [
@@ -198,13 +357,73 @@
 		{
 			"name": "UpdateEmployee",
 			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "useBrowser",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "client_authentication",
+							"value": "body",
+							"type": "string"
+						},
+						{
+							"key": "tokenType",
+							"value": "Bearer",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "Nextiva Token",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "{{client_secret}}",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "{{client_id}}",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "{{access_token_url}}",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "{{auth_url}}",
+							"type": "string"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "{{callback_url}}",
+							"type": "string"
+						},
+						{
+							"key": "state",
+							"value": "anything",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "openid profile",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
 				"method": "PUT",
 				"header": [
-					{
-						"key": "Authorization",
-						"value": "{{auth_type}} {{auth_token}}",
-						"type": "text"
-					},
 					{
 						"key": "Content-Type",
 						"name": "Content-Type",
