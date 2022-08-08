@@ -4,3 +4,7 @@ pluginManagement {
 	}
 }
 rootProject.name = 'EmployeeCrud'
+
+include 'employee-service'
+include 'iam-service'
+
