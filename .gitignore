@@ -1,6 +1,7 @@
 HELP.md
 .gradle
 build/
+target
 !employee-service/gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**
 !**/src/test/**

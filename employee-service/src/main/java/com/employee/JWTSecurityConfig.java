@@ -17,6 +17,7 @@ public class JWTSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests(authz -> authz
                         .antMatchers("/employees/**")
                         .authenticated())
+                .csrf().disable()
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt());
     }
 }
