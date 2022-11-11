@@ -119,7 +119,7 @@
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
           <executable>true</executable>
-          <mainClass>com.authserver.AuthorizationServerApp</mainClass>
+          <mainClass>com.employee.EmployeeCrudApplication</mainClass>
         </configuration>
         <executions>
           <execution>
