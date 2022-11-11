@@ -21,17 +21,9 @@
   <name>Employee Service Parent</name>
 
   <properties>
-    <swagger-annotations.version>2.2.0</swagger-annotations.version>
-    <javax-xml-bind.version>2.3.1</javax-xml-bind.version>
-    <jackson-databind-nullable.version>0.2.2</jackson-databind-nullable.version>
     <!--Versions to solve maven enforcer convergence conflicts-->
     <!--Plugin properties-->
-    <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
-    <jacoco.percentage.line>0.90</jacoco.percentage.line>
-    <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
-    <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
     <maven-versions-plugin.version>2.8.1</maven-versions-plugin.version>
-    <protoc-jar-maven-plugin.version>3.11.4</protoc-jar-maven-plugin.version>
     <!-- Maven properties-->
     <skip.it.tests>true</skip.it.tests>
   </properties>
