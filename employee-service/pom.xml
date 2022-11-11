@@ -19,7 +19,7 @@
   <description>Deployable artifact of Employee Service</description>
 
   <properties>
-    <java.version>11</java.version>
+    <java.version>17</java.version>
     <springdoc.version>1.6.12</springdoc.version>
     <jackson.version>2.14.0</jackson.version>
     <common.codec.version>1.15</common.codec.version>
