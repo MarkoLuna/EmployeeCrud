@@ -74,7 +74,6 @@
         </dependency>
 
         <!-- test -->
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -125,7 +124,6 @@
     </plugins>
     </build>
 
-
     <properties>
         <!-- non-dependencies -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -136,7 +134,7 @@
         <!-- these should be updated together with Keycloak -->
         <!-- check keycloak-dependencies-server-all effective pom -->
         <infinispan.version>13.0.8.Final</infinispan.version>
-        <resteasy.version>3.15.1.Final</resteasy.version>
+        <resteasy.version>6.2.1.Final</resteasy.version>
 
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>

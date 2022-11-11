@@ -20,8 +20,8 @@
 
   <properties>
     <java.version>11</java.version>
-    <springdoc.version>1.6.9</springdoc.version>
-    <jackson.version>2.12.6</jackson.version>
+    <springdoc.version>1.6.12</springdoc.version>
+    <jackson.version>2.14.0</jackson.version>
     <common.codec.version>1.15</common.codec.version>
     <validation.api.version>2.0.1.Final</validation.api.version>
   </properties>
