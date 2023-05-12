@@ -1,28 +1,24 @@
 package com.employee.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class EmployeeRequest {
+@Builder
+public record EmployeeRequest(
+        @NotBlank(message = "First Name cannot be empty")
+        String firstName,
 
-    @NotBlank(message = "First Name cannot be empty")
-    private String firstName;
+        @NotBlank(message = "Middle Initial cannot be empty")
+        String middleInitial,
 
-    @NotBlank(message = "Middle Initial cannot be empty")
-    private String middleInitial;
+        @NotBlank(message = "Last Name cannot be empty")
+        String lastName,
 
-    @NotBlank(message = "Last Name cannot be empty")
-    private String lastName;
+        @NotBlank(message = "Date Of Birth cannot be empty")
+        String dateOfBirth,
 
-    @NotBlank(message = "Date Of Birth cannot be empty")
-    private String dateOfBirth;
+        @NotBlank(message = "Date Of Employment cannot be empty")
+        String dateOfEmployment) {
 
-    @NotBlank(message = "Date Of Employment cannot be empty")
-    private String dateOfEmployment;
 }

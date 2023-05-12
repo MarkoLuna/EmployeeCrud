@@ -1,14 +1,14 @@
 package com.employee.dto;
 
-import lombok.Data;
+import lombok.Builder;
 
-@Data
-public class EmployeeDto {
-    private String id;
-    private String firstName;
-    private String middleInitial;
-    private String lastName;
-    private String dateOfBirth;
-    private String dateOfEmployment;
-    private String status;
+@Builder
+public record EmployeeDto(
+        String id,
+        String firstName,
+        String middleInitial,
+        String lastName,
+        String dateOfBirth,
+        String dateOfEmployment,
+        String status) {
 }

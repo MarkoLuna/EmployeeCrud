@@ -35,26 +35,25 @@ public class EmployeeService {
     }
 
     private EmployeeDto mapEmployeeDto(Employee empl) {
-        EmployeeDto employeeDto = new EmployeeDto();
-        employeeDto.setId(empl.getId());
-        employeeDto.setFirstName(empl.getFirstName());
-        employeeDto.setLastName(empl.getLastName());
-        employeeDto.setMiddleInitial(empl.getMiddleInitial());
-        employeeDto.setStatus(empl.getStatus().name());
-        employeeDto.setDateOfBirth(formatDateToString(empl.getDateOfBirth()));
-        employeeDto.setDateOfEmployment(formatDateToString(empl.getDateOfEmployment()));
-
-        return employeeDto;
+        return EmployeeDto.builder()
+                .id(empl.getId())
+                .firstName(empl.getFirstName())
+                .lastName(empl.getLastName())
+                .middleInitial(empl.getMiddleInitial())
+                .status(empl.getStatus().name())
+                .dateOfBirth(formatDateToString(empl.getDateOfBirth()))
+                .dateOfEmployment(formatDateToString(empl.getDateOfEmployment()))
+                .build();
     }
 
     private Employee mapEmployeeEntity(EmployeeRequest emplReq) {
         Employee employee = new Employee();
-        employee.setFirstName(emplReq.getFirstName());
-        employee.setLastName(emplReq.getLastName());
-        employee.setMiddleInitial(emplReq.getMiddleInitial());
+        employee.setFirstName(emplReq.firstName());
+        employee.setLastName(emplReq.lastName());
+        employee.setMiddleInitial(emplReq.middleInitial());
         employee.setStatus(EmployeeStatus.ACTIVE);
-        employee.setDateOfBirth(formatDateToString(emplReq.getDateOfBirth()));
-        employee.setDateOfEmployment(formatDateToString(emplReq.getDateOfEmployment()));
+        employee.setDateOfBirth(formatDateToString(emplReq.dateOfBirth()));
+        employee.setDateOfEmployment(formatDateToString(emplReq.dateOfEmployment()));
         return employee;
     }
 
@@ -93,10 +92,10 @@ public class EmployeeService {
     }
 
     public Optional<String> hasValidDates(EmployeeRequest employeeReq) {
-        if(!isValidDate(employeeReq.getDateOfBirth()))
+        if(!isValidDate(employeeReq.dateOfBirth()))
             return Optional.of("Invalid Date Of Birth");
 
-        if(!isValidDate(employeeReq.getDateOfEmployment()))
+        if(!isValidDate(employeeReq.dateOfEmployment()))
             return Optional.of("Invalid Date Of Employment");
 
         return Optional.empty();
@@ -104,7 +103,7 @@ public class EmployeeService {
 
     public Optional<EmployeeDto> createEmployee(EmployeeRequest req) {
         List<Employee> existanEmployee = employeeRepository.findByFirstNameAndMiddleInitialAndLastNameAndStatus(
-                req.getFirstName(), req.getMiddleInitial(), req.getLastName(), EmployeeStatus.ACTIVE);
+                req.firstName(), req.middleInitial(), req.lastName(), EmployeeStatus.ACTIVE);
 
         if(!existanEmployee.isEmpty())
             return Optional.empty();
@@ -120,12 +119,12 @@ public class EmployeeService {
         Optional<Employee> existanEmployee = employeeRepository.findByIdAndStatus(id, EmployeeStatus.ACTIVE);
         Employee employee = existanEmployee.orElseThrow(() -> new EmployeeNotFound("Unable to find the employee"));
 
-        employee.setFirstName(emplReq.getFirstName());
-        employee.setLastName(emplReq.getLastName());
-        employee.setMiddleInitial(emplReq.getMiddleInitial());
+        employee.setFirstName(emplReq.firstName());
+        employee.setLastName(emplReq.lastName());
+        employee.setMiddleInitial(emplReq.middleInitial());
         employee.setStatus(EmployeeStatus.ACTIVE);
-        employee.setDateOfBirth(formatDateToString(emplReq.getDateOfBirth()));
-        employee.setDateOfEmployment(formatDateToString(emplReq.getDateOfEmployment()));
+        employee.setDateOfBirth(formatDateToString(emplReq.dateOfBirth()));
+        employee.setDateOfEmployment(formatDateToString(emplReq.dateOfEmployment()));
 
         employeeRepository.save(employee);
         return mapEmployeeDto(employee);
