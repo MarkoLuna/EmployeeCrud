@@ -39,3 +39,15 @@ Code [Here](https://github.com/Baeldung/spring-security-oauth/tree/master/oauth-
 - Fix invalid redirect uri [here](https://stackoverflow.com/questions/45352880/keycloak-invalid-parameter-redirect-uri)
 - [Create custom login páge](https://www.baeldung.com/keycloak-custom-login-page)
 - Keycloak Api [here](https://www.keycloak.org/docs-api/12.0/rest-api/)
+
+## Updates
+link:
+https://www.keycloak.org/server/containers#_importing_a_realm_on_startup
+https://www.appsdeveloperblog.com/keycloak-rest-api-create-a-new-user/
+```bash
+docker run -p 8080:8080 \
+        -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=change_me \
+        -v ./realm/data:/opt/keycloak/data/import \
+        quay.io/keycloak/keycloak:latest \
+        start-dev --import-realm
+```
