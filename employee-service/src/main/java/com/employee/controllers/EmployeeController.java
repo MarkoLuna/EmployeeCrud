@@ -1,14 +1,11 @@
 package com.employee.controllers;
 
-import java.util.Optional;
-
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +24,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/employees", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -34,6 +32,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
         name = "Employees",
         description = "Set of endpoints for Creating, Retrieving, Updating and Deleting of Employees."
 )
+@Validated
 public class EmployeeController {
 
     @Autowired
@@ -71,11 +70,6 @@ public class EmployeeController {
     public ResponseEntity<EmployeeDto> saveEmployee(
             @Parameter(description = "Employee information for a new employee to be created.")
             @Valid @RequestBody EmployeeRequest request) {
-        
-        Optional<String> invalidError = employeeService.hasValidDates(request);
-        if (invalidError.isPresent()) {
-            throw new InvalidDataException(invalidError.get());
-        }
 
         EmployeeDto employee = employeeService.createEmployee(request)
                 .orElseThrow(() -> new InvalidDataException("Employee already exists .."));

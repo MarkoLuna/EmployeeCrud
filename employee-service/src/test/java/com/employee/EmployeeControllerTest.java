@@ -1,8 +1,13 @@
 package com.employee;
 
+import java.time.LocalDate;
+
 import com.employee.dto.EmployeeRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class EmployeeControllerTest {
 
-    private static final String BASIC_DATE = "17-09-2012";
+    private static final LocalDate BASIC_DATE = LocalDate.of(2012, 9, 17);
 
     @Autowired
     private MockMvc mockMvc;
@@ -72,6 +77,17 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$.id").exists());
     }
 
+    @DisplayName("Create a new employee with invalid request")
+    @WithMockUser
+    @Test
+    public void createEmployeeWithInvalidRequest() throws Exception {
+        mockMvc.perform(post("/employees")
+                        .content(asJsonString(new EmployeeRequest("", "", "", null, null)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
     @DisplayName("Update employee")
     @WithMockUser
     @Test
@@ -96,7 +112,10 @@ public class EmployeeControllerTest {
 
     public static String asJsonString(final Object obj) {
         try {
-            return new ObjectMapper().writeValueAsString(obj);
+            var objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.registerModule(new Jdk8Module());
+            return objectMapper.writeValueAsString(obj);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

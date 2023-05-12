@@ -5,6 +5,10 @@ springdoc:
   packagesToScan: com.employee
   pathsToMatch: /employees/**, /oauth/token
 
+logging:
+  level:
+    org.springframework.security: DEBUG
+
 ####### resource server configuration properties
 spring:
   h2:

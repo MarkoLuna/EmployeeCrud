@@ -1,8 +1,12 @@
 package com.employee.dto;
 
-import lombok.Builder;
+import java.time.LocalDate;
 
-import javax.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 
 @Builder
 public record EmployeeRequest(
@@ -15,10 +19,12 @@ public record EmployeeRequest(
         @NotBlank(message = "Last Name cannot be empty")
         String lastName,
 
-        @NotBlank(message = "Date Of Birth cannot be empty")
-        String dateOfBirth,
+        @NotNull
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "UTC")
+        LocalDate dateOfBirth,
 
-        @NotBlank(message = "Date Of Employment cannot be empty")
-        String dateOfEmployment) {
+        @NotNull
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "UTC")
+        LocalDate dateOfEmployment) {
 
 }

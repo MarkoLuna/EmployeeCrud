@@ -1,12 +1,11 @@
 package com.employee;
 
 import java.util.stream.Collectors;
-import javax.validation.ConstraintViolationException;
-import javax.validation.ValidationException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -40,7 +41,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
      */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers, HttpStatus status,
+                                                                  HttpHeaders headers, HttpStatusCode status,
                                                                   WebRequest request) {
         String error = ex.getBindingResult().getFieldErrors()
                 .stream()
@@ -61,7 +62,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
      */
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-                                                                  HttpHeaders headers, HttpStatus status,
+                                                                  HttpHeaders headers, HttpStatusCode status,
                                                                   WebRequest request) {
         String message = ex != null && StringUtils.isNotEmpty(ex.getMessage())
                 ? ex.getMessage().replace("\r", "").replace("\n", "") : "";
@@ -79,7 +80,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
      */
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(
-            MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+            MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         return responseEntity(ex.getMessage(), status);
     }
 
@@ -94,11 +95,11 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
      */
     @Override
     protected ResponseEntity<Object> handleServletRequestBindingException(
-            ServletRequestBindingException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+            ServletRequestBindingException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         return responseEntity(ex.getMessage(), status);
     }
 
-    private ResponseEntity<Object> responseEntity(String responseMessage, HttpStatus httpStatus) {
+    private ResponseEntity<Object> responseEntity(String responseMessage, HttpStatusCode httpStatus) {
         log.error("Exception '{}' status '{}'", responseMessage, httpStatus.value());
         return ResponseEntity
                 .status(httpStatus)

@@ -134,7 +134,7 @@
         <!-- these should be updated together with Keycloak -->
         <!-- check keycloak-dependencies-server-all effective pom -->
         <infinispan.version>13.0.8.Final</infinispan.version>
-        <resteasy.version>6.2.1.Final</resteasy.version>
+        <resteasy.version>6.2.3.Final</resteasy.version>
 
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>

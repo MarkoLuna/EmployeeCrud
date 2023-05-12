@@ -5,6 +5,7 @@ import com.employee.dto.EmployeeRequest;
 import com.employee.entities.Employee;
 import com.employee.enums.EmployeeStatus;
 import com.employee.exceptions.EmployeeNotFound;
+import com.employee.mappers.EmployeeMapper;
 import com.employee.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,93 +13,30 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
-@Service
-public class EmployeeService {
+import lombok.AllArgsConstructor;
 
-    public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy").withZone(ZoneOffset.UTC);
+@Service
+@AllArgsConstructor
+public class EmployeeService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
 
+    @Autowired
+    private EmployeeMapper employeeMapper;
+
     public Page<EmployeeDto> list(Integer page, Integer sizePage) {
         Sort orders = Sort.by(Sort.Direction.DESC, "dateOfEmployment");
         Page<Employee> employeeList = employeeRepository.findByStatus(EmployeeStatus.ACTIVE, PageRequest.of(page, sizePage, orders));
-        return employeeList.map(this::mapEmployeeDto);
-    }
-
-    private EmployeeDto mapEmployeeDto(Employee empl) {
-        return EmployeeDto.builder()
-                .id(empl.getId())
-                .firstName(empl.getFirstName())
-                .lastName(empl.getLastName())
-                .middleInitial(empl.getMiddleInitial())
-                .status(empl.getStatus().name())
-                .dateOfBirth(formatDateToString(empl.getDateOfBirth()))
-                .dateOfEmployment(formatDateToString(empl.getDateOfEmployment()))
-                .build();
-    }
-
-    private Employee mapEmployeeEntity(EmployeeRequest emplReq) {
-        Employee employee = new Employee();
-        employee.setFirstName(emplReq.firstName());
-        employee.setLastName(emplReq.lastName());
-        employee.setMiddleInitial(emplReq.middleInitial());
-        employee.setStatus(EmployeeStatus.ACTIVE);
-        employee.setDateOfBirth(formatDateToString(emplReq.dateOfBirth()));
-        employee.setDateOfEmployment(formatDateToString(emplReq.dateOfEmployment()));
-        return employee;
-    }
-
-    private String formatDateToString(LocalDate date) {
-        if(Objects.nonNull(date)) {
-            return formatter.format(date);
-        }
-        return "";
-    }
-
-    private LocalDate formatDateToString(String date) {
-        if(Objects.nonNull(date) && !date.isEmpty()) {
-            return LocalDate.parse(date, formatter);
-        }
-        return LocalDate.now();
-    }
-
-    private boolean isValidDate(String date) {
-        try {
-            if(isStringEmpty(date))
-                return false;
-            formatter.parse(date);
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-        return true;
-    }
-
-    private boolean isStringEmpty(String value) {
-        return Objects.isNull(value) || value.isEmpty();
+        return employeeList.map(employeeMapper::convert);
     }
 
     public EmployeeDto getEmployee(String employeeId) throws EmployeeNotFound {
         Optional<Employee> employee = employeeRepository.findByIdAndStatus(employeeId, EmployeeStatus.ACTIVE);
-        return mapEmployeeDto(employee.orElseThrow(() -> new EmployeeNotFound("Unable to find the Employee")));
-    }
-
-    public Optional<String> hasValidDates(EmployeeRequest employeeReq) {
-        if(!isValidDate(employeeReq.dateOfBirth()))
-            return Optional.of("Invalid Date Of Birth");
-
-        if(!isValidDate(employeeReq.dateOfEmployment()))
-            return Optional.of("Invalid Date Of Employment");
-
-        return Optional.empty();
+        return employeeMapper.convert(employee.orElseThrow(() -> new EmployeeNotFound("Unable to find the Employee")));
     }
 
     public Optional<EmployeeDto> createEmployee(EmployeeRequest req) {
@@ -108,31 +46,32 @@ public class EmployeeService {
         if(!existanEmployee.isEmpty())
             return Optional.empty();
 
-        Employee employee = mapEmployeeEntity(req);
+        Employee employee = employeeMapper.convert(req);
+        employee.setStatus(EmployeeStatus.ACTIVE);
         employeeRepository.save(employee);
-        EmployeeDto employeeDto = mapEmployeeDto(employee);
+        EmployeeDto employeeDto = employeeMapper.convert(employee);
         return Optional.of(employeeDto);
     }
 
     public EmployeeDto updateEmployee(String id, EmployeeRequest emplReq) throws EmployeeNotFound {
 
-        Optional<Employee> existanEmployee = employeeRepository.findByIdAndStatus(id, EmployeeStatus.ACTIVE);
-        Employee employee = existanEmployee.orElseThrow(() -> new EmployeeNotFound("Unable to find the employee"));
+        Optional<Employee> existingEmployee = employeeRepository.findByIdAndStatus(id, EmployeeStatus.ACTIVE);
+        Employee employee = existingEmployee.orElseThrow(() -> new EmployeeNotFound("Unable to find the employee"));
 
         employee.setFirstName(emplReq.firstName());
         employee.setLastName(emplReq.lastName());
         employee.setMiddleInitial(emplReq.middleInitial());
         employee.setStatus(EmployeeStatus.ACTIVE);
-        employee.setDateOfBirth(formatDateToString(emplReq.dateOfBirth()));
-        employee.setDateOfEmployment(formatDateToString(emplReq.dateOfEmployment()));
+        employee.setDateOfBirth(emplReq.dateOfBirth());
+        employee.setDateOfEmployment(emplReq.dateOfEmployment());
 
         employeeRepository.save(employee);
-        return mapEmployeeDto(employee);
+        return employeeMapper.convert(employee);
     }
 
     public void deleteEmployee(String id) throws EmployeeNotFound {
         Optional<Employee> existanEmployee = employeeRepository.findByIdAndStatus(id, EmployeeStatus.ACTIVE);
         Employee employee = existanEmployee.orElseThrow(() -> new EmployeeNotFound("Unable to find the employee"));
-        employeeRepository.delete(employee);
+        employeeRepository.deleteById(employee.getId());
     }
 }
