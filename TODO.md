@@ -1,0 +1,6 @@
+- add checkstyle
+- add mapstruct
+- gralvm with docker native image ?
+- docker compose ?
+- swagger auto generate ?
+- http client for generate users against keycloak with feign
