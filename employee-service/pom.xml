@@ -24,6 +24,8 @@
     <jackson.version>2.14.0</jackson.version>
     <common.codec.version>1.15</common.codec.version>
     <validation.api.version>2.0.1.Final</validation.api.version>
+    <maven.checkstyle.version>3.2.2</maven.checkstyle.version>
+    <puppycrawl.version>10.11.0</puppycrawl.version>
   </properties>
 
   <dependencies>
@@ -126,6 +128,42 @@
             <id>build-info</id>
             <goals>
               <goal>build-info</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>${maven.checkstyle.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>${puppycrawl.version}</version>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <configLocation>file://${project.basedir}/checkstyle.xml</configLocation>
+          <consoleOutput>true</consoleOutput>
+          <sourceDirectories>
+            <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
+            <sourceDirectory>${project.build.testSourceDirectory}</sourceDirectory>
+          </sourceDirectories>
+        </configuration>
+        <executions>
+          <execution>
+            <id>check</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>checkstyle</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>checkstyle</goal>
             </goals>
           </execution>
         </executions>
