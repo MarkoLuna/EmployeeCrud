@@ -10,66 +10,11 @@
 			"name": "ListEmployees",
 			"request": {
 				"auth": {
-					"type": "oauth2",
-					"oauth2": [
+					"type": "bearer",
+					"bearer": [
 						{
-							"key": "useBrowser",
-							"value": false,
-							"type": "boolean"
-						},
-						{
-							"key": "client_authentication",
-							"value": "body",
-							"type": "string"
-						},
-						{
-							"key": "tokenType",
-							"value": "Bearer",
-							"type": "string"
-						},
-						{
-							"key": "tokenName",
-							"value": "Nextiva Token",
-							"type": "string"
-						},
-						{
-							"key": "clientSecret",
-							"value": "{{client_secret}}",
-							"type": "string"
-						},
-						{
-							"key": "clientId",
-							"value": "{{client_id}}",
-							"type": "string"
-						},
-						{
-							"key": "accessTokenUrl",
-							"value": "{{access_token_url}}",
-							"type": "string"
-						},
-						{
-							"key": "authUrl",
-							"value": "{{auth_url}}",
-							"type": "string"
-						},
-						{
-							"key": "redirect_uri",
-							"value": "{{callback_url}}",
-							"type": "string"
-						},
-						{
-							"key": "state",
-							"value": "anything",
-							"type": "string"
-						},
-						{
-							"key": "scope",
-							"value": "openid profile",
-							"type": "string"
-						},
-						{
-							"key": "addTokenTo",
-							"value": "header",
+							"key": "token",
+							"value": "{{auth_token}}",
 							"type": "string"
 						}
 					]
@@ -95,66 +40,11 @@
 			"name": "GetEmployee",
 			"request": {
 				"auth": {
-					"type": "oauth2",
-					"oauth2": [
+					"type": "bearer",
+					"bearer": [
 						{
-							"key": "useBrowser",
-							"value": false,
-							"type": "boolean"
-						},
-						{
-							"key": "client_authentication",
-							"value": "body",
-							"type": "string"
-						},
-						{
-							"key": "tokenType",
-							"value": "Bearer",
-							"type": "string"
-						},
-						{
-							"key": "tokenName",
-							"value": "Nextiva Token",
-							"type": "string"
-						},
-						{
-							"key": "clientSecret",
-							"value": "{{client_secret}}",
-							"type": "string"
-						},
-						{
-							"key": "clientId",
-							"value": "{{client_id}}",
-							"type": "string"
-						},
-						{
-							"key": "accessTokenUrl",
-							"value": "{{access_token_url}}",
-							"type": "string"
-						},
-						{
-							"key": "authUrl",
-							"value": "{{auth_url}}",
-							"type": "string"
-						},
-						{
-							"key": "redirect_uri",
-							"value": "{{callback_url}}",
-							"type": "string"
-						},
-						{
-							"key": "state",
-							"value": "anything",
-							"type": "string"
-						},
-						{
-							"key": "scope",
-							"value": "openid profile",
-							"type": "string"
-						},
-						{
-							"key": "addTokenTo",
-							"value": "header",
+							"key": "token",
+							"value": "{{auth_token}}",
 							"type": "string"
 						}
 					]
@@ -179,66 +69,11 @@
 			"name": "CreateEmployee",
 			"request": {
 				"auth": {
-					"type": "oauth2",
-					"oauth2": [
+					"type": "bearer",
+					"bearer": [
 						{
-							"key": "useBrowser",
-							"value": false,
-							"type": "boolean"
-						},
-						{
-							"key": "client_authentication",
-							"value": "body",
-							"type": "string"
-						},
-						{
-							"key": "tokenType",
-							"value": "Bearer",
-							"type": "string"
-						},
-						{
-							"key": "tokenName",
-							"value": "Nextiva Token",
-							"type": "string"
-						},
-						{
-							"key": "clientSecret",
-							"value": "{{client_secret}}",
-							"type": "string"
-						},
-						{
-							"key": "clientId",
-							"value": "{{client_id}}",
-							"type": "string"
-						},
-						{
-							"key": "accessTokenUrl",
-							"value": "{{access_token_url}}",
-							"type": "string"
-						},
-						{
-							"key": "authUrl",
-							"value": "{{auth_url}}",
-							"type": "string"
-						},
-						{
-							"key": "redirect_uri",
-							"value": "{{callback_url}}",
-							"type": "string"
-						},
-						{
-							"key": "state",
-							"value": "anything",
-							"type": "string"
-						},
-						{
-							"key": "scope",
-							"value": "openid profile",
-							"type": "string"
-						},
-						{
-							"key": "addTokenTo",
-							"value": "header",
+							"key": "token",
+							"value": "{{auth_token}}",
 							"type": "string"
 						}
 					]
@@ -257,14 +92,13 @@
 					"raw": "{\n\t\"firstName\": \"Mark\",\n\t\"middleInitial\": \"L\",\n\t\"lastName\": \"Luna\",\n\t\"dateOfBirth\": \"17-09-2012\",\n\t\"dateOfEmployment\": \"17-09-2014\"\n}"
 				},
 				"url": {
-					"raw": "localhost:8080/employees/",
+					"raw": "localhost:8080/employees",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"employees",
-						""
+						"employees"
 					]
 				}
 			},
@@ -274,66 +108,11 @@
 			"name": "DeleteEmployee",
 			"request": {
 				"auth": {
-					"type": "oauth2",
-					"oauth2": [
+					"type": "bearer",
+					"bearer": [
 						{
-							"key": "useBrowser",
-							"value": false,
-							"type": "boolean"
-						},
-						{
-							"key": "client_authentication",
-							"value": "body",
-							"type": "string"
-						},
-						{
-							"key": "tokenType",
-							"value": "Bearer",
-							"type": "string"
-						},
-						{
-							"key": "tokenName",
-							"value": "Nextiva Token",
-							"type": "string"
-						},
-						{
-							"key": "clientSecret",
-							"value": "{{client_secret}}",
-							"type": "string"
-						},
-						{
-							"key": "clientId",
-							"value": "{{client_id}}",
-							"type": "string"
-						},
-						{
-							"key": "accessTokenUrl",
-							"value": "{{access_token_url}}",
-							"type": "string"
-						},
-						{
-							"key": "authUrl",
-							"value": "{{auth_url}}",
-							"type": "string"
-						},
-						{
-							"key": "redirect_uri",
-							"value": "{{callback_url}}",
-							"type": "string"
-						},
-						{
-							"key": "state",
-							"value": "anything",
-							"type": "string"
-						},
-						{
-							"key": "scope",
-							"value": "openid profile",
-							"type": "string"
-						},
-						{
-							"key": "addTokenTo",
-							"value": "header",
+							"key": "token",
+							"value": "{{auth_token}}",
 							"type": "string"
 						}
 					]
@@ -341,14 +120,14 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/employees/d508a6eb-829e-4cb2-8e3b-84e799d11f88",
+					"raw": "localhost:8080/employees/1d5cf451-ffcd-403a-a8c0-8338d0ce381d",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"employees",
-						"d508a6eb-829e-4cb2-8e3b-84e799d11f88"
+						"1d5cf451-ffcd-403a-a8c0-8338d0ce381d"
 					]
 				}
 			},
@@ -358,66 +137,11 @@
 			"name": "UpdateEmployee",
 			"request": {
 				"auth": {
-					"type": "oauth2",
-					"oauth2": [
+					"type": "bearer",
+					"bearer": [
 						{
-							"key": "useBrowser",
-							"value": false,
-							"type": "boolean"
-						},
-						{
-							"key": "client_authentication",
-							"value": "body",
-							"type": "string"
-						},
-						{
-							"key": "tokenType",
-							"value": "Bearer",
-							"type": "string"
-						},
-						{
-							"key": "tokenName",
-							"value": "Nextiva Token",
-							"type": "string"
-						},
-						{
-							"key": "clientSecret",
-							"value": "{{client_secret}}",
-							"type": "string"
-						},
-						{
-							"key": "clientId",
-							"value": "{{client_id}}",
-							"type": "string"
-						},
-						{
-							"key": "accessTokenUrl",
-							"value": "{{access_token_url}}",
-							"type": "string"
-						},
-						{
-							"key": "authUrl",
-							"value": "{{auth_url}}",
-							"type": "string"
-						},
-						{
-							"key": "redirect_uri",
-							"value": "{{callback_url}}",
-							"type": "string"
-						},
-						{
-							"key": "state",
-							"value": "anything",
-							"type": "string"
-						},
-						{
-							"key": "scope",
-							"value": "openid profile",
-							"type": "string"
-						},
-						{
-							"key": "addTokenTo",
-							"value": "header",
+							"key": "token",
+							"value": "{{auth_token}}",
 							"type": "string"
 						}
 					]
@@ -444,6 +168,156 @@
 					"path": [
 						"employees",
 						"e26b200a-a8d0-11e9-a2a3-2a2ae2dbcce4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetToken",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"if (jsonData[\"access_token\"] != null) {",
+							"    postman.setEnvironmentVariable(\"auth_token\", jsonData[\"access_token\"]);",
+							"}",
+							"if (jsonData[\"token_type\"] != null) {",
+							"    postman.setEnvironmentVariable(\"auth_type\", jsonData[\"token_type\"]);",
+							"}",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "master-client",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "z6vxpf3uzvJLlsErs9oufAyolCYFvEos",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "marcosluna",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "marco94",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/realms/master/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"realms",
+						"master",
+						"protocol",
+						"openid-connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetToken User 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"if (jsonData[\"access_token\"] != null) {",
+							"    postman.setEnvironmentVariable(\"auth_token\", jsonData[\"access_token\"]);",
+							"}",
+							"if (jsonData[\"token_type\"] != null) {",
+							"    postman.setEnvironmentVariable(\"auth_type\", jsonData[\"token_type\"]);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "newClient",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "newClientSecret",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "john@test.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8081/realms/dev/protocol/openid-connect/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"realms",
+						"dev",
+						"protocol",
+						"openid-connect",
+						"token"
 					]
 				}
 			},
