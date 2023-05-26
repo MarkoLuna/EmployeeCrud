@@ -1,3 +1,16 @@
+# Keycloak Embedded in a Spring Boot Application
+Keycloak is an open-source Identity and Access Management solution administered by RedHat and developed in Java by JBoss.
+
+
+### Run authorization-server
+```bash
+docker compose up -d
+```
+
+### Stop authorization-server
+```bash
+docker compose down
+```
 
 ### Generate tokens
 
@@ -32,3 +45,8 @@ curl --location 'http://localhost:8080/realms/dev/protocol/openid-connect/token'
 --data-urlencode 'password=pass' \
 --data-urlencode 'grant_type=password'
 ```
+
+## Users
+- john@test.com / 123
+- mike@other.com / pass
+- marcosluna / marco94
