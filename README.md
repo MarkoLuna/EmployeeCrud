@@ -25,3 +25,13 @@ mvn versions:display-property-updates
 ```
 mvn checkstyle:checkstyle
 ```
+
+### run authorization-server
+```bash
+docker compose up
+```
+
+### stop authorization-server
+```bash
+docker compose down
+```

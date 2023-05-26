@@ -1,0 +1,49 @@
+volumes:
+  keycloak-pg-data:
+    name: keycloak-pg-data
+    driver: local
+  keycloak-pg-preinitdb:
+    name: keycloak-pg-preinitdb
+    driver: local
+  keycloak-pg-initdb:
+    name: keycloak-pg-initdb
+    driver: local
+
+services:
+  keycloak-x-pg:
+    container_name: ws-keycloak-x-pg
+    image: docker.io/bitnami/postgresql:${KEYCLOAK_POSTGRES_VERSION}
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRESQL_DATABASE: ${KEYCLOAK_POSTGRES_DATABASE}
+      POSTGRESQL_USERNAME: ${KEYCLOAK_POSTGRES_USER}
+      POSTGRESQL_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
+    volumes:
+      - keycloak-pg-data:/bitnami/postgresql
+      - keycloak-pg-preinitdb:/docker-entrypoint-preinitdb.d
+      - keycloak-pg-initdb:/docker-entrypoint-initdb.d
+
+  keycloak-x:
+    container_name: ws-keycloak-x
+    image: docker.io/bitnami/keycloak:${KEYCLOAK_VERSION}
+    restart: unless-stopped
+    ports:
+      - 8081:8080
+    environment:
+      KEYCLOAK_CREATE_ADMIN_USER: true
+      KEYCLOAK_ADMIN_USER: ${KEYCLOAK_USER}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_PASSWORD}
+      KEYCLOAK_DATABASE_HOST: ws-keycloak-x-pg
+      KEYCLOAK_DATABASE_PORT: 5432
+      KEYCLOAK_DATABASE_NAME: ${KEYCLOAK_POSTGRES_DATABASE}
+      KEYCLOAK_DATABASE_USER: ${KEYCLOAK_POSTGRES_USER}
+      KEYCLOAK_DATABASE_PASSWORD: ${KEYCLOAK_POSTGRES_PASSWORD}
+    command: [ "/scripts/run_import.sh" ]
+    volumes:
+      - ./keycloak/scripts:/scripts
+      - ./keycloak/import:/import
+      - ./keycloak/export:/export
+    depends_on:
+      - keycloak-x-pg
