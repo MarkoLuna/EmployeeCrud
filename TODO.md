@@ -1,6 +1,9 @@
 - add checkstyle
 - add mapstruct
 - gralvm with docker native image ?
+  - [Documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html)
 - docker compose ?
 - swagger auto generate ?
 - http client for generate users against keycloak with feign
+  - [Example](https://medium.hexadefence.com/keycloak-admin-rest-api-63a294814e1b) - [Keycloak Api](https://www.keycloak.org/docs-api/21.1.1/rest-api/index.html)
+  - [Example 2](https://www.appsdeveloperblog.com/keycloak-rest-api-create-a-new-user/)
