@@ -3,7 +3,7 @@ server:
 
 springdoc:
   packagesToScan: com.employee
-  pathsToMatch: /employees/**, /oauth/token
+  pathsToMatch: /employees/**
 
 logging:
   level:
@@ -30,7 +30,7 @@ spring:
             scope: openid
         provider:
           keycloak:
-            issuer-uri: http://localhost:8081/realms/dev
+            issuer-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8081/realms/dev
+          issuer-uri: http://keycloak-x:8080/realms/dev

@@ -23,7 +23,8 @@ import io.swagger.v3.oas.annotations.servers.Server;
                         email = "josemarcosluna9@gmail.com"
                 ),
                 license = @License(
-                        name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0"
+                        name = "Apache 2.0",
+                        url = "https://www.apache.org/licenses/LICENSE-2.0"
                 ),
                 description = "Basic Crud of Employees"
         ),
