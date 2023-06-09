@@ -2,12 +2,12 @@
 Keycloak is an open-source Identity and Access Management solution administered by RedHat and developed in Java by JBoss.
 
 
-### Run authorization-server
+### Run authorization-server and Employee Service
 ```bash
-docker compose up -d
+docker compose up -d --build
 ```
 
-### Stop authorization-server
+### Stop
 ```bash
 docker compose down
 ```

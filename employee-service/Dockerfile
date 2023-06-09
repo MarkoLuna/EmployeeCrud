@@ -5,5 +5,6 @@ COPY target/EmployeeService.jar /app.jar
 CMD [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
 
 ### commands
+# mvn clean package -Dmaven.test.skip=true
 # docker build -t employeeapp .
 # docker run -p 8080:8080 --rm employeeapp
