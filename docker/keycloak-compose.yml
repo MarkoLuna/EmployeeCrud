@@ -55,7 +55,7 @@ services:
       interval: 5s
       retries: 15
       start_period: 20s
-      timeout: 10s
+      timeout: 3s
     environment:
       KEYCLOAK_CREATE_ADMIN_USER: true
       KEYCLOAK_ADMIN_USER: ${KEYCLOAK_USER}
