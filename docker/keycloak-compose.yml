@@ -18,6 +18,9 @@ services:
     restart: unless-stopped
     ports:
       - "8080:8080"
+    environment:
+      - "JAVA_OPTS=${JAVA_ARGS} -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+      - "SPRING_PROFILES_ACTIVE=docker"
     healthcheck:
       test: curl --fail http://localhost:8080/actuator/health || exit 1
       interval: 5s

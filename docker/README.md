@@ -4,7 +4,7 @@ Keycloak is an open-source Identity and Access Management solution administered 
 
 ### Run authorization-server and Employee Service
 ```bash
-docker compose up -d --build
+docker compose up -d --build --remove-orphans
 ```
 
 ### Stop

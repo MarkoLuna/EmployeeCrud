@@ -7,7 +7,7 @@ springdoc:
 
 logging:
   level:
-    org.springframework.security: DEBUG
+    org.springframework.security: trace
 
 ####### resource server configuration properties
 spring:
@@ -33,4 +33,4 @@ spring:
             issuer-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak-x:8080/realms/dev
+          issuer-uri: http://localhost:8081/realms/dev

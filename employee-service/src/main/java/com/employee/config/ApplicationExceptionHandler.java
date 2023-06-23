@@ -1,8 +1,11 @@
-package com.employee;
+package com.employee.config;
 
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -17,6 +20,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.employee.exceptions.EmployeeNotFound;
+import com.employee.exceptions.InvalidDataException;
+
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ValidationException;
 import lombok.extern.log4j.Log4j2;
@@ -25,6 +31,7 @@ import lombok.extern.log4j.Log4j2;
  * Application exception handler.
  */
 @Log4j2
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -100,7 +107,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
     }
 
     private ResponseEntity<Object> responseEntity(String responseMessage, HttpStatusCode httpStatus) {
-        log.error("Exception '{}' status '{}'", responseMessage, httpStatus.value());
+        log.warn("Exception '{}' status '{}'", responseMessage, httpStatus.value());
         return ResponseEntity
                 .status(httpStatus)
                 .headers(httpHeaders(responseMessage))
@@ -142,6 +149,18 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleAccessDenied(Exception ex) {
         return responseEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(EmployeeNotFound.class)
+    public final ResponseEntity<Object> handleEmployeeNotFoundException(EmployeeNotFound ex,
+                                                                        WebRequest request) {
+        return responseEntity(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(InvalidDataException.class)
+    public final ResponseEntity<Object> handleInvalidDataException(InvalidDataException ex,
+                                                                   WebRequest request) {
+        return responseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 }
