@@ -14,11 +14,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -28,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 })
 @DisplayName("Employee tests")
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 public class EmployeeControllerTest {
 
     private static final LocalDate BASIC_DATE = LocalDate.of(2012, 9, 17);
@@ -35,12 +43,16 @@ public class EmployeeControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @MockBean
+    ClientRegistrationRepository registrations;
+
     @DisplayName("List all employees")
-    @WithMockUser
     @Test
     public void getAllEmployees() throws Exception {
+        when(registrations.findByRegistrationId(anyString())).thenReturn(buildClientRegistration());
 
         mockMvc.perform(get("/employees/{page}/{total}", 0, 10)
+                        .with(jwt())
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[*].id").isNotEmpty());
@@ -49,16 +61,20 @@ public class EmployeeControllerTest {
     @DisplayName("Attempt get all employees and has unauthorized status")
     @Test
     public void getAllEmployeesUnAuthorized() throws Exception {
+        when(registrations.findByRegistrationId(anyString())).thenReturn(buildClientRegistration());
+
         mockMvc.perform(get("/employees/{page}/{total}", 0, 10)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
     }
 
     @DisplayName("Get employee by Id")
-    @WithMockUser
     @Test
     public void getEmployeeById() throws Exception {
+        when(registrations.findByRegistrationId(anyString())).thenReturn(buildClientRegistration());
+
         mockMvc.perform(get("/employees/{id}", "e26b1ed4-a8d0-11e9-a2a3-2a2ae2dbcce4")
+                        .with(jwt())
                 .accept(MediaType.APPLICATION_JSON))
                 // .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
@@ -66,10 +82,12 @@ public class EmployeeControllerTest {
     }
 
     @DisplayName("Create a new employee")
-    @WithMockUser
     @Test
     public void createEmployee() throws Exception {
+        when(registrations.findByRegistrationId(anyString())).thenReturn(buildClientRegistration());
+
         mockMvc.perform(post("/employees")
+                        .with(jwt())
                 .content(asJsonString(new EmployeeRequest("Gerardo2", "J", "Luna", BASIC_DATE, BASIC_DATE)))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -78,10 +96,12 @@ public class EmployeeControllerTest {
     }
 
     @DisplayName("Create a new employee with invalid request")
-    @WithMockUser
     @Test
     public void createEmployeeWithInvalidRequest() throws Exception {
+        when(registrations.findByRegistrationId(anyString())).thenReturn(buildClientRegistration());
+
         mockMvc.perform(post("/employees")
+                        .with(jwt())
                         .content(asJsonString(new EmployeeRequest("", "", "", null, null)))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -89,10 +109,12 @@ public class EmployeeControllerTest {
     }
 
     @DisplayName("Update employee")
-    @WithMockUser
     @Test
     public void updateEmployee() throws Exception {
+        when(registrations.findByRegistrationId(anyString())).thenReturn(buildClientRegistration());
+
         mockMvc.perform(put("/employees/{id}", "e26b1ed4-a8d0-11e9-a2a3-2a2ae2dbcce4")
+                        .with(jwt())
                 .content(asJsonString(new EmployeeRequest("Gerardo", "J", "Luna", BASIC_DATE, BASIC_DATE)))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -102,10 +124,12 @@ public class EmployeeControllerTest {
     }
 
     @DisplayName("Delete employee")
-    @WithMockUser
     @Test
     public void deleteEmployee() throws Exception {
+        when(registrations.findByRegistrationId(anyString())).thenReturn(buildClientRegistration());
+
         mockMvc.perform(delete("/employees/{id}", "e26b1d76-a8d0-11e9-a2a3-2a2ae2dbcce4")
+                        .with(jwt())
                 )
                 .andExpect(status().isOk());
     }
@@ -119,6 +143,18 @@ public class EmployeeControllerTest {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private ClientRegistration buildClientRegistration() {
+        return ClientRegistration
+                .withRegistrationId("id")
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .clientId("newClient")
+                .clientSecret("newClientSecret")
+                .redirectUri("http://localhost:8080/login")
+                .authorizationUri("http://localhost:8080/new-client/login/oauth2/code/custom")
+                .tokenUri("http://localhost:8080/new-client/login/oauth2/code/custom")
+                .build();
     }
 
 }
