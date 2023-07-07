@@ -2,8 +2,6 @@ package com.employee.mappers;
 
 import org.springframework.stereotype.Service;
 
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,9 +17,6 @@ import jakarta.validation.constraints.NotNull;
   */
 @Service
 public class EmployeeMapper {
-
-    public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
-                .withZone(ZoneOffset.UTC);
 
     /**
       * Maps {@link Employee} to {@link EmployeeDto}.

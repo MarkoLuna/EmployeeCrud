@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,6 +47,14 @@ public class EmployeeControllerTest {
     @MockBean
     ClientRegistrationRepository registrations;
 
+    private static ObjectMapper objectMapper = new ObjectMapper();
+
+    @BeforeAll
+    private static void setUp() {
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.registerModule(new Jdk8Module());
+    }
+
     @DisplayName("List all employees")
     @Test
     public void getAllEmployees() throws Exception {
@@ -79,6 +88,17 @@ public class EmployeeControllerTest {
                 // .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value("e26b1ed4-a8d0-11e9-a2a3-2a2ae2dbcce4"));
+    }
+
+    @DisplayName("Get employee by Id with invalid id")
+    @Test
+    public void getEmployeeByIdWithInvalidIdThenNotFound() throws Exception {
+        when(registrations.findByRegistrationId(anyString())).thenReturn(buildClientRegistration());
+
+        mockMvc.perform(get("/employees/{id}", "invalid-id")
+                        .with(jwt())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @DisplayName("Create a new employee")
@@ -136,9 +156,6 @@ public class EmployeeControllerTest {
 
     public static String asJsonString(final Object obj) {
         try {
-            var objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new JavaTimeModule());
-            objectMapper.registerModule(new Jdk8Module());
             return objectMapper.writeValueAsString(obj);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

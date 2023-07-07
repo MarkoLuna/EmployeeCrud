@@ -147,7 +147,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
      * @return {@link ResponseEntity}
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleAccessDenied(Exception ex) {
+    public ResponseEntity<Object> handleException(Exception ex) {
         return responseEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
