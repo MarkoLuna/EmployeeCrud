@@ -1,9 +1,23 @@
-- add checkstyle
+- add checkstyle (DONE)
 - add mapstruct
 - gralvm with docker native image ?
   - [Documentation](https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html)
-- docker compose ?
-- swagger auto generate ?
-- http client for generate users against keycloak with feign
+- docker compose ? (DONE)
+- swagger auto generate ? (NOT MORE)
+- http client for generate users against keycloak with feign or [http interfaces](https://docs.spring.io/spring-framework/reference/integration/rest-clients.html#rest-http-interface)
   - [Example](https://medium.hexadefence.com/keycloak-admin-rest-api-63a294814e1b) - [Keycloak Api](https://www.keycloak.org/docs-api/21.1.1/rest-api/index.html)
   - [Example 2](https://www.appsdeveloperblog.com/keycloak-rest-api-create-a-new-user/)
+- graphql for spring
+- large data volumes
+  - streams
+    - kafka streams
+    - apache flink
+    - storm
+    - hadoop
+  - apache spark (batch computing)
+  - ETL job orchestration
+    - Argo 
+    - apache airflow (data orchestration)
+  - databricks (data analytics)
+
+[Spring boot 3 doc](https://docs.spring.io/spring-boot/docs/3.0.0/reference/htmlsingle/#native-image.developing-your-first-application)
