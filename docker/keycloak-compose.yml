@@ -44,6 +44,10 @@ services:
       - keycloak-pg-preinitdb:/docker-entrypoint-preinitdb.d
       - keycloak-pg-initdb:/docker-entrypoint-initdb.d
 
+# TODO replace keycloak
+  # https://github.com/keycloak/keycloak/discussions/10187, integration deprecated with spring boot
+  # https://www.keycloak.org/2023/03/adapter-deprecation-update.html
+  # https://stackoverflow.com/questions/74571191/use-keycloak-spring-adapter-with-spring-boot-3/74572732#74572732
   keycloak-x:
     container_name: ws-keycloak-x
     image: docker.io/bitnami/keycloak:${KEYCLOAK_VERSION}
