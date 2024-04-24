@@ -20,7 +20,7 @@
 
   <properties>
     <java.version>17</java.version>
-    <springdoc.version>2.1.0</springdoc.version>
+    <springdoc.version>2.5.0</springdoc.version>
     <common.codec.version>1.15</common.codec.version>
     <validation.api.version>2.0.1.Final</validation.api.version>
     <maven.checkstyle.version>3.2.2</maven.checkstyle.version>
