@@ -36,14 +36,14 @@ This project consists of two main modules:
 1. **Start the IAM Service (Keycloak Authorization Server)**
    ```bash
    cd iam-service
-   mvn spring-boot:run
+   ./mvnw spring-boot:run
    ```
    The Keycloak server will start on `http://localhost:8081`
 
 2. **Start the Employee Service**
    ```bash
    cd employee-service
-   mvn spring-boot:run
+   ./mvnw spring-boot:run
    ```
    The employee service will start on `http://localhost:8080`
 
@@ -104,23 +104,23 @@ The employee service provides the following endpoints (all require OAuth2 authen
 
 ### Build the entire project
 ```bash
-mvn clean install
+./mvnw clean install
 ```
 
 ### Run tests
 ```bash
-mvn test
+./mvnw test
 ```
 
 ### Check for dependency updates
 ```bash
-mvn versions:display-property-updates
+./mvnw versions:display-property-updates
 ```
 
 ### Update dependency versions
 ```bash
-mvn versions:display-dependency-updates
-mvn versions:use-latest-releases
+./mvnw versions:display-dependency-updates
+./mvnw versions:use-latest-releases
 ```
 
 ## Database

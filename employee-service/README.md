@@ -40,12 +40,12 @@ The Employee Service is a microservice that handles all employee-related operati
 
 1. **Build the application**
    ```bash
-   mvn clean install
+   ./mvnw clean install
    ```
 
 2. **Start the service**
    ```bash
-   mvn spring-boot:run
+   ./mvnw spring-boot:run
    ```
 
 3. **Verify the service is running**
@@ -298,34 +298,34 @@ CREATE TABLE employee (
 ### Build and Test
 ```bash
 # Clean and build
-mvn clean install
+./mvnw clean install
 
 # Run tests
-mvn test
+./mvnw test
 
 # Skip tests during build
-mvn clean install -DskipTests
+./mvnw clean install -DskipTests
 ```
 
 ### Run Application
 ```bash
 # Using Maven
-mvn spring-boot:run
+./mvnw spring-boot:run
 
 # Using Java (after build)
 java -jar target/EmployeeService.jar
 
 # With custom port
-mvn spring-boot:run -Dspring-boot.run.arguments=--server.port=8081
+./mvnw spring-boot:run -Dspring-boot.run.arguments=--server.port=8081
 ```
 
 ### Dependencies Management
 ```bash
 # Check for updates
-mvn versions:display-dependency-updates
+./mvnw versions:display-dependency-updates
 
 # Update versions
-mvn versions:use-latest-releases
+./mvnw versions:use-latest-releases
 ```
 
 ## Production Considerations

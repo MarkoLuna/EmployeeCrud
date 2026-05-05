@@ -31,12 +31,12 @@ This service embeds Keycloak 18.0.2 as an Identity and Access Management (IAM) s
 
 1. **Build the application**
    ```bash
-   mvn clean install
+   ./mvnw clean install
    ```
 
 2. **Start the Keycloak server**
    ```bash
-   mvn spring-boot:run
+   ./mvnw spring-boot:run
    ```
 
 3. **Verify the service is running**
