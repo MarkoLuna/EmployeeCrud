@@ -1,0 +1,69 @@
+### IAM Service Endpoints
+
+# Health Check
+GET http://localhost:8083/api/healthcheck
+Accept: application/json
+
+### Get Access Token
+# Retrieve token from IAM service (Keycloak)
+POST http://localhost:8083/auth/realms/baeldung/protocol/openid-connect/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id=newClient&client_secret=newClientSecret&grant_type=password&username=john@test.com&password=123
+
+> {%
+    client.global.set("token", response.body.access_token);
+%}
+
+### Employee Service Endpoints
+
+# Note: Employee Service endpoints require Bearer Authentication
+# Retrieve token from IAM service (Keycloak) and replace {{token}} with the actual token
+
+# Get Employee List (Page 0, Size 10)
+GET http://localhost:8080/employees/0/10
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+
+# Get Specific Employee by ID
+GET http://localhost:8080/employees/1
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+
+# Create a New Employee
+POST http://localhost:8080/employees
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "firstName": "John",
+  "middleInitial": "D",
+  "lastName": "Doe",
+  "dateOfBirth": "1990-01-01",
+  "dateOfEmployment": "2020-01-01"
+}
+
+###
+
+# Update an Existing Employee
+PUT http://localhost:8080/employees/1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "firstName": "John",
+  "middleInitial": "M",
+  "lastName": "Doe",
+  "dateOfBirth": "1990-01-01",
+  "dateOfEmployment": "2020-01-01"
+}
+
+###
+
+# Delete an Employee
+DELETE http://localhost:8080/employees/1
+Authorization: Bearer {{token}}
