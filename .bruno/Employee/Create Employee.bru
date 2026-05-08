@@ -1,0 +1,25 @@
+meta {
+  name: Create Employee
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{employee_url}}/employees
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{auth_token}}
+}
+
+body:json {
+  {
+    "firstName": "John",
+    "middleInitial": "D",
+    "lastName": "Doe",
+    "dateOfBirth": "01-01-1990",
+    "dateOfEmployment": "01-01-2020"
+  }
+}

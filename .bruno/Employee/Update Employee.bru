@@ -1,0 +1,25 @@
+meta {
+  name: Update Employee
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{employee_url}}/employees/af661471-ea52-4e69-892c-55878c76b318
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{auth_token}}
+}
+
+body:json {
+  {
+    "firstName": "John updated",
+    "middleInitial": "M",
+    "lastName": "Doe",
+    "dateOfBirth": "01-01-1990",
+    "dateOfEmployment": "01-01-2020"
+  }
+}

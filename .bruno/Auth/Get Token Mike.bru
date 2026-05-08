@@ -1,0 +1,31 @@
+meta {
+  name: Get Token Mike
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{keycloak_url}}/realms/baeldung/protocol/openid-connect/token
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  client_id: newClient
+  client_secret: newClientSecret
+  grant_type: password
+  username: mike@other.com
+  password: 123
+  scope: openid roles profile
+}
+
+script:post-response {
+  
+  var jsonData = res.getBody();
+  if (jsonData["access_token"] != null) {
+      bru.setEnvVar("auth_token", jsonData["access_token"]);
+  }
+  if (jsonData["token_type"] != null) {
+      bru.setEnvVar("auth_type", jsonData["token_type"]);
+  }
+}

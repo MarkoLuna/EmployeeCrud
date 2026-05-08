@@ -85,23 +85,29 @@ Local Services                    Docker Dependencies
 
 The following users are pre-configured in the `baeldung` realm:
 
-- **John Doe** (`john@test.com` / `123`): Has **`manage-users`** and **`user`** roles. Authorized to perform all user management and employee CRUD operations.
+- **John Doe** (`john@test.com` / `123`): Has **`manage-users`**, **`view-users`**, and **`query-users`** roles. Authorized to perform all user management and employee CRUD operations.
 - **Mike Smith** (`mike@other.com` / `123`): Has **`user`** role. Authorized for employee operations but restricted from user management.
 
-### Testing with Postman
+### Testing APIs
 
-1. Import the provided Postman collection:
-   - File: `employee-service/EmployeeCrud.postman_collection.json`
-   
-2. Authentication flow:
-   - Select an environment in Postman
-   - Run the Login request first to obtain an OAuth2 token
-   - The token will be automatically stored for subsequent requests
+#### Bruno (Recommended)
+
+The project includes a complete [Bruno](https://www.usebruno.com/) collection for testing all microservices.
+
+1.  **Setup**:
+    *   Install the Bruno Desktop App.
+    *   Open the folder `.bruno` from the project root in Bruno.
+    *   Select the **Local** environment in the top right corner.
+
+2.  **Authentication**:
+    *   Run the `IAM/Get Token` (John) or `IAM/Get Token Mike` request first.
+    *   The `auth_token` variable will be automatically updated for all other requests.
 
 ## Project Structure
 
 ```
 EmployeeCrud/
+├── .bruno/                   # Bruno API Collection
 ├── docker/                   # Docker dependencies
 │   ├── docker-compose.yml   # Keycloak and PostgreSQL services
 │   └── baeldung-realm.json  # Keycloak realm configuration
@@ -114,7 +120,6 @@ EmployeeCrud/
 │   │   ├── exceptions/       # Custom exceptions
 │   │   ├── repositories/     # JPA repositories
 │   │   └── services/         # Business logic
-│   └── EmployeeCrud.postman_collection.json
 ├── iam-service/              # OAuth2 client service
 │   ├── src/main/java/com/authserver/
 │   │   ├── config/           # Configuration classes
@@ -134,13 +139,13 @@ EmployeeCrud/
 
 The employee service provides the following endpoints (all require OAuth2 authentication):
 
-- `GET /api/employees` - Retrieve all employees
-- `GET /api/employees/{id}` - Retrieve employee by ID
-- `POST /api/employees` - Create new employee
-- `PUT /api/employees/{id}` - Update existing employee
-- `DELETE /api/employees/{id}` - Delete employee
+- `GET /employees/{page}/{size}` - Retrieve paged employees
+- `GET /employees/{id}` - Retrieve employee by ID
+- `POST /employees` - Create new employee
+- `PUT /employees/{id}` - Update existing employee
+- `DELETE /employees/{id}` - Delete employee
 
-The IAM service provides endpoints for user management (require OAuth2 authentication):
+The IAM service provides endpoints for user management:
 
 - `POST /api/users` - Create a new user
 - `GET /api/users` - List all users
@@ -187,46 +192,12 @@ The IAM service provides endpoints for user management (require OAuth2 authentic
   - Username: employee_user
   - Password: employee_pass
 
-### Local Development
-- **H2 Database**: In-memory database for local development
-  - **Employee Service**: http://localhost:8080/h2-console
-  - **IAM Service**: http://localhost:8082/h2-console
-  - JDBC URL: `jdbc:h2:mem:testdb`
-  - Username: `sa`
-  - Password: `password`
-
 ## Service Port Mappings
 
-### Current Architecture
 - **Keycloak**: http://localhost:8083 (Docker container)
 - **IAM Service**: http://localhost:8082 (local process)
 - **Employee Service**: http://localhost:8080 (local process)
 - **PostgreSQL**: localhost:5432 (Docker container)
-
-## Configuration
-
-### Single Configuration File
-The IAM service uses a single `application.yml` configuration file that works for all environments:
-
-- **Keycloak URL**: http://keycloak:8080 (Docker network)
-- **Database**: PostgreSQL (Docker container)
-- **Logging**: DEBUG level
-
-### Docker Dependencies Configuration
-
-#### Keycloak Configuration
-- **Container Name**: keycloak
-- **Image**: quay.io/keycloak/keycloak:24.0.4
-- **Port**: 8083:8080 (host:container)
-- **Realm**: baeldung (auto-imported)
-- **Admin Credentials**: admin/admin
-
-#### PostgreSQL Configuration
-- **Container Name**: postgres
-- **Image**: postgres:15
-- **Port**: 5432:5432 (host:container)
-- **Database**: employee_db
-- **Credentials**: employee_user/employee_pass
 
 ## Contributing
 

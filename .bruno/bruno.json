@@ -1,0 +1,8 @@
+{
+  "name": "EmployeeCrud",
+  "type": "collection",
+  "version": "1",
+  "presets": {
+    "bruno": "1"
+  }
+}

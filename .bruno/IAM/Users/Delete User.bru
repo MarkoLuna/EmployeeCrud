@@ -1,0 +1,19 @@
+meta {
+  name: Delete User
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{iam_url}}/api/users/{{user_id}}
+  body: none
+  auth: bearer
+}
+
+vars:pre-request {
+  user_id: 123
+}
+
+auth:bearer {
+  token: {{auth_token}}
+}

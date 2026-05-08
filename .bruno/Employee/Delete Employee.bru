@@ -1,0 +1,15 @@
+meta {
+  name: Delete Employee
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{employee_url}}/employees/af661471-ea52-4e69-892c-55878c76b318
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{auth_token}}
+}

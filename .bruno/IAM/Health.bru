@@ -1,0 +1,15 @@
+meta {
+  name: Health
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{iam_url}}/actuator/health
+  body: none
+  auth: none
+}
+
+auth:bearer {
+  token: {{auth_token}}
+}

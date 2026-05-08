@@ -1,0 +1,32 @@
+meta {
+  name: Create User
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{iam_url}}/api/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{auth_token}}
+}
+
+body:json {
+  {
+    "username": "newuser",
+    "firstName": "New",
+    "lastName": "User",
+    "email": "newuser@example.com",
+    "password": "password123",
+    "enabled": true,
+    "emailVerified": false,
+    "realmRoles": ["user"],
+    "attributes": {
+      "department": ["IT"],
+      "location": ["Remote"]
+    }
+  }
+}

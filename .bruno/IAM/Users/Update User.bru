@@ -1,0 +1,32 @@
+meta {
+  name: Update User
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{iam_url}}/api/users/{{user_id}}
+  body: json
+  auth: bearer
+}
+
+body:json {
+  {
+    "firstName": "UpdatedName",
+    "lastName": "UpdatedLast",
+    "email": "updated@example.com",
+    "enabled": true,
+    "realmRolesToAdd": ["user"],
+    "attributes": {
+      "department": ["Marketing"]
+    }
+  }
+}
+
+vars:pre-request {
+  user_id: 123
+}
+
+auth:bearer {
+  token: {{auth_token}}
+}
