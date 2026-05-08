@@ -9,16 +9,81 @@ Content-Type: application/json
 POST http://localhost:8083/realms/baeldung/protocol/openid-connect/token
 Content-Type: application/x-www-form-urlencoded
 
-client_id=newClient&client_secret=newClientSecret&grant_type=password&username=john@test.com&password=123
+client_id=newClient&client_secret=newClientSecret&grant_type=password&username=john@test.com&password=123&scope=openid roles profile
 
 > {%
     client.global.set("token", response.body.access_token);
 %}
 
+### User Management Endpoints (IAM Service)
+
+# Create a New User
+POST http://localhost:8082/api/users
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "username": "newuser",
+  "firstName": "New",
+  "lastName": "User",
+  "email": "newuser@example.com",
+  "password": "password123",
+  "enabled": true,
+  "emailVerified": false,
+  "realmRoles": ["user"],
+  "attributes": {
+    "department": ["IT"],
+    "location": ["Remote"]
+  }
+}
+
+###
+
+# Get All Users
+GET http://localhost:8082/api/users
+Authorization: Bearer {{token}}
+
+###
+
+# Get User by ID
+GET http://localhost:8082/api/users/123
+Authorization: Bearer {{token}}
+
+###
+
+# Get User by Username
+GET http://localhost:8082/api/users/username/newuser
+Authorization: Bearer {{token}}
+
+###
+
+# Update a User
+PUT http://localhost:8082/api/users/123
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "firstName": "UpdatedFirstName",
+  "lastName": "UpdatedLastName",
+  "email": "updated@example.com",
+  "enabled": true,
+  "realmRolesToAdd": ["admin"],
+  "realmRolesToRemove": ["user"]
+}
+
+###
+
+# Delete a User
+DELETE http://localhost:8082/api/users/123
+Authorization: Bearer {{token}}
+
 ### Employee Service Endpoints
 
-# Note: Employee Service endpoints require Bearer Authentication
-# Retrieve token from Keycloak and replace {{token}} with the actual token
+# Health Check (No Authentication Required)
+GET http://localhost:8080/actuator/health
+Content-Type: application/json
+
+###
 
 # Get Employee List (Page 0, Size 10)
 GET http://localhost:8080/employees/0/10

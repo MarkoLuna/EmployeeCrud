@@ -1,30 +1,13 @@
-# Employee CRUD Application
+# Employee Management System
 
-A Spring Boot multi-module application demonstrating employee management with OAuth2 authentication using Keycloak as the identity provider.
+A distributed system for managing employee records, consisting of multiple microservices built with Spring Boot, Keycloak, and PostgreSQL.
 
-## Architecture
+## Services
 
-This project consists of two main modules:
+- **Employee Service**: Manages employee data (CRUD operations).
+- **IAM Service**: Handles identity and access management, acting as a client to Keycloak.
 
-- **employee-service**: RESTful API for employee CRUD operations with OAuth2 resource server security
-- **iam-service**: Keycloak-based OAuth2 authorization server for authentication and authorization
-
-## Technology Stack
-
-- **Spring Boot 3.4.0** - Main application framework
-- **Spring Security** - Authentication and authorization
-- **OAuth2 Resource Server** - JWT token validation
-- **Keycloak 24.0.4** - Identity and access management (external Docker container)
-- **Spring Data JPA** - Database abstraction layer
-- **PostgreSQL** - Production database (Docker)
-- **H2 Database** - In-memory database for development
-- **Lombok** - Reduces boilerplate code
-- **SpringDoc OpenAPI** - API documentation with Swagger UI
-- **Docker & Docker Compose** - Containerization and orchestration
-- **Maven** - Build and dependency management
-- **Java 21** - Runtime environment
-
-## Quick Start
+## Getting Started
 
 ### Prerequisites
 
@@ -90,8 +73,20 @@ Local Services                    Docker Dependencies
 
 ### API Documentation
 
-- **Swagger UI**: http://localhost:8080/swagger-ui/index.html
+#### Employee Service
+- **Swagger UI**: http://localhost:8080/swagger-ui.html
 - **OpenAPI JSON**: http://localhost:8080/v3/api-docs
+
+#### IAM Service
+- **Swagger UI**: http://localhost:8082/swagger-ui.html
+- **OpenAPI JSON**: http://localhost:8082/v3/api-docs
+
+### Default Users
+
+The following users are pre-configured in the `baeldung` realm:
+
+- **John Doe** (`john@test.com` / `123`): Has **`manage-users`** and **`user`** roles. Authorized to perform all user management and employee CRUD operations.
+- **Mike Smith** (`mike@other.com` / `123`): Has **`user`** role. Authorized for employee operations but restricted from user management.
 
 ### Testing with Postman
 
@@ -123,7 +118,9 @@ EmployeeCrud/
 ├── iam-service/              # OAuth2 client service
 │   ├── src/main/java/com/authserver/
 │   │   ├── config/           # Configuration classes
-│   │   ├── controllers/      # Health check controllers
+│   │   ├── controllers/      # REST controllers
+│   │   ├── dto/              # Data transfer objects
+│   │   ├── service/          # User management logic
 │   │   └── ExternalKeycloakClientApp.java
 │   ├── src/main/resources/
 │   │   └── application.yml   # Single configuration for all environments
@@ -143,9 +140,18 @@ The employee service provides the following endpoints (all require OAuth2 authen
 - `PUT /api/employees/{id}` - Update existing employee
 - `DELETE /api/employees/{id}` - Delete employee
 
+The IAM service provides endpoints for user management (require OAuth2 authentication):
+
+- `POST /api/users` - Create a new user
+- `GET /api/users` - List all users
+- `GET /api/users/{id}` - Get user by ID
+- `GET /api/users/username/{username}` - Get user by username
+- `PUT /api/users/{id}` - Update user details and roles
+- `DELETE /api/users/{id}` - Delete a user
+
 ## Security Configuration
 
-- **OAuth2 Resource Server**: Employee service validates JWT tokens issued by Keycloak
+- **OAuth2 Resource Server**: Both services validate JWT tokens issued by Keycloak
 - **Keycloak Realm**: Pre-configured realm for employee management
 - **Token-based Authentication**: All API endpoints require valid JWT tokens
 
