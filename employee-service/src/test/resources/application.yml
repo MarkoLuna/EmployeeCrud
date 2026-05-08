@@ -1,10 +1,18 @@
 spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
   jpa:
     defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
   security:
     oauth2:
       resourceserver:
         jwt:
-          # Override the issuer-uri check — no real Keycloak available in tests.
-          # The JwtDecoder bean is replaced with a no-op to allow context loading.
           issuer-uri: http://localhost:9999/auth/realms/test

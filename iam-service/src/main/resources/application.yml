@@ -10,12 +10,12 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak:8080/realms/baeldung
-          jwk-set-uri: http://keycloak:8080/realms/baeldung/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8083/realms/baeldung
+          jwk-set-uri: http://localhost:8083/realms/baeldung/protocol/openid-connect/certs
   
   # Database Configuration
   datasource:
-    url: jdbc:postgresql://postgres:5432/employee_db
+    url: jdbc:postgresql://localhost:5432/employee_db
     username: employee_user
     password: employee_pass
     driver-class-name: org.postgresql.Driver
@@ -37,12 +37,22 @@ spring:
 # Keycloak Client Configuration
 app:
   keycloak:
-    url: http://keycloak:8080
+    url: http://localhost:8083
     realm: baeldung
     client-id: newClient
     client-secret: newClientSecret
     admin-user: admin
     admin-password: admin
+
+# Keycloak Admin Configuration
+keycloak:
+  admin:
+    server-url: http://localhost:8083
+    realm: baeldung
+    username: admin
+    password: admin
+    client-id: admin-cli
+    client-secret: ""
 
 # Logging Configuration
 logging:

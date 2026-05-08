@@ -10,12 +10,12 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://keycloak:8080/realms/baeldung
-          jwk-set-uri: http://keycloak:8080/realms/baeldung/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8083/realms/baeldung
+          jwk-set-uri: http://localhost:8083/realms/baeldung/protocol/openid-connect/certs
   
   # Database Configuration
   datasource:
-    url: jdbc:postgresql://postgres:5432/employee_db
+    url: jdbc:postgresql://localhost:5432/employee_db
     username: employee_user
     password: employee_pass
     driver-class-name: org.postgresql.Driver
@@ -39,7 +39,7 @@ springdoc:
     path: /v3/api-docs
   swagger-ui:
     path: /swagger-ui.html
-    operationsSorter: method
+  operationsSorter: method
 
 logging:
   level:

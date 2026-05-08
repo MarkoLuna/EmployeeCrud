@@ -4,6 +4,7 @@ import com.employee.controllers.EmployeeController;
 import com.employee.dto.EmployeeDto;
 import com.employee.dto.EmployeeRequest;
 import com.employee.exceptions.EmployeeNotFound;
+import com.employee.exceptions.handlers.GeneralExceptionHandler;
 import com.employee.services.EmployeeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -35,7 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(EmployeeController.class)
-@Import({ SecurityConfiguration.class, ApplicationExceptionHandler.class })
+@Import({ SecurityConfiguration.class, GeneralExceptionHandler.class })
 @DisplayName("EmployeeController")
 public class EmployeeControllerTest {
 
