@@ -1,0 +1,10 @@
+spring:
+  jpa:
+    defer-datasource-initialization: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Override the issuer-uri check — no real Keycloak available in tests.
+          # The JwtDecoder bean is replaced with a no-op to allow context loading.
+          issuer-uri: http://localhost:9999/auth/realms/test

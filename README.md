@@ -11,41 +11,82 @@ This project consists of two main modules:
 
 ## Technology Stack
 
-- **Spring Boot 2.7.5** - Main application framework
+- **Spring Boot 3.4.0** - Main application framework
 - **Spring Security** - Authentication and authorization
 - **OAuth2 Resource Server** - JWT token validation
-- **Keycloak 18.0.2** - Identity and access management
+- **Keycloak 24.0.4** - Identity and access management (external Docker container)
 - **Spring Data JPA** - Database abstraction layer
+- **PostgreSQL** - Production database (Docker)
 - **H2 Database** - In-memory database for development
 - **Lombok** - Reduces boilerplate code
-- **SpringDoc OpenAPI 1.6.12** - API documentation with Swagger UI
+- **SpringDoc OpenAPI** - API documentation with Swagger UI
+- **Docker & Docker Compose** - Containerization and orchestration
 - **Maven** - Build and dependency management
-- **Java 17** - Runtime environment
+- **Java 21** - Runtime environment
 
 ## Quick Start
 
 ### Prerequisites
 
-- **OpenJDK 17** or higher
-  - Recommended: [Amazon Corretto 17](https://docs.aws.amazon.com/corretto/latest/corretto-17-ug/downloads-list.html)
+- **OpenJDK 21** or higher
+  - Recommended: [Amazon Corretto 21](https://docs.aws.amazon.com/corretto/latest/corretto-21-ug/downloads-list.html)
 - **Maven 3.3+**
   - You can use the embedded Maven binaries that your IDE offers, or install your own
+- **Docker & Docker Compose**
+  - Required for running Keycloak and PostgreSQL containers
 
 ### Running the Application
 
-1. **Start the IAM Service (Keycloak Authorization Server)**
+#### Recommended Setup: Local Services + Docker Dependencies
+
+1. **Start Docker dependencies (Keycloak and PostgreSQL)**
+   ```bash
+   cd docker
+   docker-compose up -d
+   ```
+   This will start:
+   - **Keycloak**: http://localhost:8083 (identity provider)
+   - **PostgreSQL**: localhost:5432 (database)
+
+2. **Start the IAM Service**
    ```bash
    cd iam-service
    ./mvnw spring-boot:run
    ```
-   The Keycloak server will start on `http://localhost:8081`
+   The IAM service will start on `http://localhost:8082`
 
-2. **Start the Employee Service**
+3. **Start the Employee Service**
    ```bash
    cd employee-service
    ./mvnw spring-boot:run
    ```
    The employee service will start on `http://localhost:8080`
+
+4. **Stop dependencies**
+   ```bash
+   cd docker
+   docker-compose down
+   ```
+
+#### Alternative: Full Docker Setup
+
+If you prefer to run everything in containers, you can modify the Docker Compose file to include the application services.
+
+### Architecture Overview
+
+```
+Local Services                    Docker Dependencies
+┌─────────────────┐              ┌─────────────────┐
+│  IAM Service    │◄────────────►│    Keycloak     │
+│  (localhost:8082) │              │ (localhost:8083)│
+└─────────────────┘              └─────────────────┘
+         │                               │
+         ▼                               ▼
+┌─────────────────┐              ┌─────────────────┐
+│ Employee Service│◄────────────►│   PostgreSQL    │
+│ (localhost:8080) │              │ (localhost:5432)│
+└─────────────────┘              └─────────────────┘
+```
 
 ### API Documentation
 
@@ -66,7 +107,10 @@ This project consists of two main modules:
 
 ```
 EmployeeCrud/
-├── employee-service/          # Employee management API
+├── docker/                   # Docker dependencies
+│   ├── docker-compose.yml   # Keycloak and PostgreSQL services
+│   └── baeldung-realm.json  # Keycloak realm configuration
+├── employee-service/         # Employee management API
 │   ├── src/main/java/com/employee/
 │   │   ├── controllers/       # REST controllers
 │   │   ├── dto/              # Data transfer objects
@@ -76,11 +120,16 @@ EmployeeCrud/
 │   │   ├── repositories/     # JPA repositories
 │   │   └── services/         # Business logic
 │   └── EmployeeCrud.postman_collection.json
-├── iam-service/              # Keycloak authorization server
+├── iam-service/              # OAuth2 client service
+│   ├── src/main/java/com/authserver/
+│   │   ├── config/           # Configuration classes
+│   │   ├── controllers/      # Health check controllers
+│   │   └── ExternalKeycloakClientApp.java
 │   ├── src/main/resources/
-│   │   ├── keycloak-server.json
-│   │   └── baeldung-realm.json
+│   │   └── application.yml   # Single configuration for all environments
+│   └── Dockerfile
 ├── pom.xml                   # Parent POM
+├── endpoints.http            # API testing endpoints
 └── README.md
 ```
 
@@ -125,25 +174,53 @@ The employee service provides the following endpoints (all require OAuth2 authen
 
 ## Database
 
-The application uses H2 in-memory database for development. You can access the H2 console:
+### Docker Environment
+- **PostgreSQL**: Used in Docker Compose setup
+  - Host: localhost:5432
+  - Database: employee_db
+  - Username: employee_user
+  - Password: employee_pass
 
-- **Employee Service**: http://localhost:8080/h2-console
-- **IAM Service**: http://localhost:8081/h2-console
+### Local Development
+- **H2 Database**: In-memory database for local development
+  - **Employee Service**: http://localhost:8080/h2-console
+  - **IAM Service**: http://localhost:8082/h2-console
+  - JDBC URL: `jdbc:h2:mem:testdb`
+  - Username: `sa`
+  - Password: `password`
 
-Default connection details:
-- JDBC URL: `jdbc:h2:mem:testdb`
-- Username: `sa`
-- Password: (empty)
+## Service Port Mappings
+
+### Current Architecture
+- **Keycloak**: http://localhost:8083 (Docker container)
+- **IAM Service**: http://localhost:8082 (local process)
+- **Employee Service**: http://localhost:8080 (local process)
+- **PostgreSQL**: localhost:5432 (Docker container)
 
 ## Configuration
 
-### Employee Service Port
-- Default: `8080`
-- Can be overridden via: `--server.port=8080`
+### Single Configuration File
+The IAM service uses a single `application.yml` configuration file that works for all environments:
 
-### IAM Service Port
-- Default: `8081`
-- Can be overridden via: `--server.port=8081`
+- **Keycloak URL**: http://keycloak:8080 (Docker network)
+- **Database**: PostgreSQL (Docker container)
+- **Logging**: DEBUG level
+
+### Docker Dependencies Configuration
+
+#### Keycloak Configuration
+- **Container Name**: keycloak
+- **Image**: quay.io/keycloak/keycloak:24.0.4
+- **Port**: 8083:8080 (host:container)
+- **Realm**: baeldung (auto-imported)
+- **Admin Credentials**: admin/admin
+
+#### PostgreSQL Configuration
+- **Container Name**: postgres
+- **Image**: postgres:15
+- **Port**: 5432:5432 (host:container)
+- **Database**: employee_db
+- **Credentials**: employee_user/employee_pass
 
 ## Contributing
 

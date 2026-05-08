@@ -1,11 +1,14 @@
 package com.employee;
 
 import java.util.stream.Collectors;
-import javax.validation.ConstraintViolationException;
-import javax.validation.ValidationException;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
+import com.employee.exceptions.EmployeeNotFound;
+import com.employee.exceptions.InvalidDataException;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -30,18 +33,20 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
     private static final String RESPONSE_ENTITY_ERROR_HEADER = "app-context-error";
 
     /**
-     * Exception to be thrown when validation on an argument annotated with @Valid fails.
+     * Exception to be thrown when validation on an argument annotated with @Valid
+     * fails.
      *
-     * @param ex Exception object
+     * @param ex      Exception object
      * @param headers response headers
-     * @param status response status
+     * @param status  response status
      * @param request current request
      * @return {@link ResponseEntity} instance
      */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers, HttpStatus status,
-                                                                  WebRequest request) {
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
         String error = ex.getBindingResult().getFieldErrors()
                 .stream()
                 .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
@@ -51,55 +56,68 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
     }
 
     /**
-     * Exception to be thrown when validation on an enum argument annotated with @Valid fails.
+     * Exception to be thrown when validation on an enum argument annotated
+     * with @Valid fails.
      *
-     * @param ex Exception object
+     * @param ex      Exception object
      * @param headers response headers
-     * @param status response status
+     * @param status  response status
      * @param request current request
      * @return {@link ResponseEntity} instance
      */
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-                                                                  HttpHeaders headers, HttpStatus status,
-                                                                  WebRequest request) {
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
         String message = ex != null && StringUtils.isNotEmpty(ex.getMessage())
-                ? ex.getMessage().replace("\r", "").replace("\n", "") : "";
+                ? ex.getMessage().replace("\r", "").replace("\n", "")
+                : "";
         return responseEntity(message, status);
     }
 
     /**
      * catches exception that indicates a missing parameter.
      *
-     * @param ex Exception object
+     * @param ex      Exception object
      * @param headers response headers
-     * @param status response status
+     * @param status  response status
      * @param request current request
      * @return response entity instance
      */
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(
-            MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+            MissingServletRequestParameterException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
         return responseEntity(ex.getMessage(), status);
     }
 
     /**
      * catches when we want to treat binding exceptions as unrecoverable.
      *
-     * @param ex Exception object
+     * @param ex      Exception object
      * @param headers response headers
-     * @param status response status
+     * @param status  response status
      * @param request current request
      * @return response entity instance
      */
     @Override
     protected ResponseEntity<Object> handleServletRequestBindingException(
-            ServletRequestBindingException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+            ServletRequestBindingException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
         return responseEntity(ex.getMessage(), status);
     }
 
-    private ResponseEntity<Object> responseEntity(String responseMessage, HttpStatus httpStatus) {
+    private ResponseEntity<Object> responseEntity(
+            String responseMessage,
+            HttpStatusCode httpStatus) {
+
         log.error("Exception '{}' status '{}'", responseMessage, httpStatus.value());
+
         return ResponseEntity
                 .status(httpStatus)
                 .headers(httpHeaders(responseMessage))
@@ -113,18 +131,41 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
     }
 
     /**
+     * Handles {@link EmployeeNotFound} by returning a 404 response.
+     *
+     * @param ex the {@link EmployeeNotFound}
+     * @return {@link ResponseEntity} with 404 status
+     */
+    @ExceptionHandler(EmployeeNotFound.class)
+    public ResponseEntity<Object> handleEmployeeNotFound(EmployeeNotFound ex) {
+        return responseEntity(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Handles {@link InvalidDataException} by returning a 400 response.
+     *
+     * @param ex the {@link InvalidDataException}
+     * @return {@link ResponseEntity} with 400 status
+     */
+    @ExceptionHandler(InvalidDataException.class)
+    public ResponseEntity<Object> handleInvalidData(InvalidDataException ex) {
+        return responseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    /**
      * Map an exception to a response entity.
      *
      * @param ex Handled exception.
      * @return ResponseEntity for the exception.
      */
-    @ExceptionHandler({ConstraintViolationException.class, ValidationException.class})
+    @ExceptionHandler({ ConstraintViolationException.class, ValidationException.class })
     public ResponseEntity<Object> handleBadRequest(Exception ex) {
         return responseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     /**
      * Implement a handler for a {@link AccessDeniedException}.
+     * 
      * @param ex the {@link AccessDeniedException}
      * @return {@link ResponseEntity}
      */
@@ -135,6 +176,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 
     /**
      * Implement a handler for a {@link Exception}.
+     * 
      * @param ex the {@link Exception}
      * @return {@link ResponseEntity}
      */

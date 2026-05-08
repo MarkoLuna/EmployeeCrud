@@ -42,30 +42,25 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Keycloak server -->
+        <!-- OAuth2 Client for External Keycloak -->
         <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jackson2-provider</artifactId>
-            <version>${resteasy.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
-
+        
         <dependency>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-dependencies-server-all</artifactId>
-            <version>${keycloak.version}</version>
-            <type>pom</type>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
+        
 
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        
         <!-- config properties processor -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -108,36 +103,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-maven-plugin</artifactId>
             <configuration>
-                <mainClass>com.authserver.AuthorizationServerApp</mainClass>
-                <requiresUnpack>
-                    <dependency>
-                        <groupId>org.keycloak</groupId>
-                        <artifactId>keycloak-connections-jpa</artifactId>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.keycloak</groupId>
-                        <artifactId>keycloak-model-jpa</artifactId>
-                    </dependency>
-                </requiresUnpack>
+                <mainClass>com.authserver.ExternalKeycloakClientApp</mainClass>
             </configuration>
         </plugin>
     </plugins>
     </build>
 
     <properties>
-        <!-- non-dependencies -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- <java.version>13</java.version> -->
+        <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
 
-        <keycloak.version>18.0.2</keycloak.version>
-
-        <!-- these should be updated together with Keycloak -->
-        <!-- check keycloak-dependencies-server-all effective pom -->
-        <infinispan.version>13.0.8.Final</infinispan.version>
-        <resteasy.version>6.2.1.Final</resteasy.version>
-
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
 </project>

@@ -1,23 +1,47 @@
 server:
   port: 8080
 
-springdoc:
-  packagesToScan: com.employee
-  pathsToMatch: /employees/**, /oauth/token
-
-####### resource server configuration properties
 spring:
-  h2:
-    console:
-      enabled: true
-  jpa:
-    defer-datasource-initialization: true
-    show-sql: true
-    generate-ddl: true
-    hibernate:
-      ddl-auto: create
+  application:
+    name: employee-service
+  
+  # Keycloak Configuration for External Keycloak
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8083/auth/realms/baeldung
+          issuer-uri: http://keycloak:8080/realms/baeldung
+          jwk-set-uri: http://keycloak:8080/realms/baeldung/protocol/openid-connect/certs
+  
+  # Database Configuration
+  datasource:
+    url: jdbc:postgresql://postgres:5432/employee_db
+    username: employee_user
+    password: employee_pass
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+
+logging:
+  level:
+    com.employee: DEBUG
+    org.springframework.security: DEBUG

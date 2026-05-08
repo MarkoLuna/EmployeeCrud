@@ -1,0 +1,52 @@
+
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.4
+    container_name: keycloak
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_FEATURES=preview
+      - KC_HTTP_ENABLED=true
+      - KC_HOSTNAME=localhost
+      - KC_HOSTNAME_PORT=8083
+      - KC_HOSTNAME_STRICT=false
+      - KC_HOSTNAME_STRICT_HTTPS=false
+      - KC_DB=dev-file
+      - KC_TRANSACTION_XA_ENABLED=false
+    ports:
+      - "8083:8080"
+    volumes:
+      - ./baeldung-realm.json:/opt/keycloak/data/import/baeldung-realm.json:ro
+    command:
+      - start-dev
+      - --import-realm
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ready"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    networks:
+      - employee-network
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=employee_db
+      - POSTGRES_USER=employee_user
+      - POSTGRES_PASSWORD=employee_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - employee-network
+
+volumes:
+  postgres_data:
+
+networks:
+  employee-network:
+    driver: bridge
