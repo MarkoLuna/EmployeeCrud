@@ -1,10 +1,9 @@
 package com.employee.exceptions.handlers;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
-import jakarta.annotation.PostConstruct;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -34,11 +33,6 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     
     private static final String MESSAGE_HEADER = "app-context-error";
 
-    @PostConstruct
-    public void init() {
-        log.info("GeneralExceptionHandler initialized and active");
-    }
-    
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex, WebRequest request) {
         log.error("Unhandled Exception ({}): {}", ex.getClass().getSimpleName(), ex.getMessage(), ex);
@@ -72,7 +66,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         });
         
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
                 .message("Validation Failed")
@@ -99,7 +93,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         });
 
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .status(status.value())
                 .error(HttpStatus.valueOf(status.value()).getReasonPhrase())
                 .message("Validation Failed")
@@ -132,7 +126,7 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<ErrorResponse> buildErrorResponse(String message, HttpStatus status, WebRequest request) {
         String path = getPath(request);
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .status(status.value())
                 .error(status.getReasonPhrase())
                 .message(message)

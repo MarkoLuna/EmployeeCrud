@@ -199,15 +199,3 @@ The IAM service provides endpoints for user management:
 - **Employee Service**: http://localhost:8080 (local process)
 - **PostgreSQL**: localhost:5432 (Docker container)
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Run the test suite
-6. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License.

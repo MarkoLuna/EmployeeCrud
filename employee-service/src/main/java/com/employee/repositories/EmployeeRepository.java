@@ -14,5 +14,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
     Page<Employee> findAll(Pageable pageable);
     Page<Employee> findByStatus(EmployeeStatus status, Pageable pageable);
     Optional<Employee> findByIdAndStatus(String id, EmployeeStatus status);
-    List<Employee> findByFirstNameAndMiddleInitialAndLastNameAndStatus(String firstName, String middleInitial, String lastName, EmployeeStatus status);
+    List<Employee> findByFirstNameAndMiddleInitialAndLastNameAndStatus(String firstName,
+                                                                       String middleInitial,
+                                                                       String lastName,
+                                                                       EmployeeStatus status);
 }
